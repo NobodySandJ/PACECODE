@@ -15,28 +15,48 @@
     />
   </head>
   <body class="font-['Poppins',_sans-serif] bg-gray-50 text-gray-800">
-    
     <header class="bg-white shadow-sm sticky top-0 z-50">
-      <nav class="container mx-auto px-4 py-2 flex justify-between items-center">
+      <nav
+        class="container mx-auto px-4 py-2 flex justify-between items-center"
+      >
         <a href="/" class="flex items-center space-x-3">
-          <img src="/assets/logo.png" alt="Logo Sekolah" class="h-15" />
-          <span class="text-xl font-bold text-gray-800 mt-3">SMKN 1 Dlanggu</span>
+          <img src="/assets/logo.png" alt="Logo Sekolah" class="h-12" />
+          <span class="text-xl font-bold text-gray-800">SMKN 1 Dlanggu</span>
         </a>
 
-        <ul class="hidden md:flex items-center space-x-8 text-gray-600 font-medium">
+        <ul
+          class="hidden md:flex items-center space-x-8 text-gray-600 font-medium"
+        >
           <li class="relative">
             <a
-              href="profil.html"
-              class="nav-link-dropdown flex items-center gap-1 relative text-indigo-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[2px] after:bg-indigo-600"
+              href="#"
+              class="nav-link-dropdown flex items-center gap-1 relative hover:text-indigo-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-indigo-600 after:transition-all after:duration-300 hover:after:w-full"
             >
-              Profil 
+              Profil
             </a>
             <div
-              class="dropdown-panel absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg p-2 transition-all duration-300 ease-in-out opacity-0 -translate-y-2 invisible"
+              class="dropdown-panel absolute top-full left-0 mt-2 w-70 bg-white rounded-md shadow-lg p-2 transition-all duration-300 ease-in-out opacity-0 -translate-y-2 invisible"
             >
-              <a href="profil.html#sejarah" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">Sejarah</a>
-              <a href="profil.html#visi-misi" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">Visi & Misi</a>
-              <a href="profil.html#fasilitas" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">Fasilitas</a>
+              <a
+                href="profil.html"
+                class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                >Profil Sekolah</a
+              >
+              <a
+                href="#"
+                class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                >Profil Guru</a
+              >
+              <a
+                href="#"
+                class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                >Fasilitas</a
+              >
+              <a
+                href="#"
+                class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                >Galeri</a
+              >
             </div>
           </li>
 
@@ -48,28 +68,60 @@
               Jurusan
             </a>
             <div
-              class="dropdown-panel absolute top-full left-0 mt-2 w-96 bg-white rounded-md shadow-lg p-4 transition-all duration-300 ease-in-out opacity-0 -translate-y-2 invisible"
+              class="dropdown-panel absolute top-full left-0 mt-2 w-116 bg-white rounded-md shadow-lg p-2 transition-all duration-300 ease-in-out opacity-0 -translate-y-2 invisible"
             >
               <div class="grid grid-cols-2 gap-x-4">
                 <div>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">RPL</a>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">TKJ</a>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">DKV</a>
+                  <a
+                    href="/jurusan.html?id=rpl"
+                    class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                    >Rekayasa Perangkat Lunak</a
+                  >
+                  <a
+                    href="/jurusan.html?id=tkj"
+                    class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                    >Teknik Komputer Jaringan</a
+                  >
+                  <a
+                    href="/jurusan.html?id=dkv"
+                    class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                    >Desain Komunikasi Visual</a
+                  >
                 </div>
                 <div>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">Animasi</a>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">Kuliner</a>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600">Perhotelan</a>
+                  <a
+                    href="/jurusan.html?id=animasi"
+                    class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                    >Animasi</a
+                  >
+                  <a
+                    href="/jurusan.html?id=kuliner"
+                    class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                    >Kuliner</a
+                  >
+                  <a
+                    href="/jurusan.html?id=perhotelan"
+                    class="block px-4 py-2 text-lg text-gray-700 rounded hover:bg-indigo-50 hover:text-indigo-600"
+                    >Perhotelan</a
+                  >
                 </div>
               </div>
             </div>
           </li>
-          
+
           <li>
-            <a href="#" class="relative hover:text-indigo-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-indigo-600 after:transition-all after:duration-300 hover:after:w-full">Berita</a>
+            <a
+              href="#"
+              class="relative hover:text-indigo-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-indigo-600 after:transition-all after:duration-300 hover:after:w-full"
+              >Berita</a
+            >
           </li>
           <li>
-            <a href="#" class="relative hover:text-indigo-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-indigo-600 after:transition-all after:duration-300 hover:after:w-full">Portfolio</a>
+            <a
+              href="#"
+              class="relative hover:text-indigo-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-indigo-600 after:transition-all after:duration-300 hover:after:w-full"
+              >Portfolio</a
+            >
           </li>
         </ul>
 
@@ -78,7 +130,6 @@
         </button>
       </nav>
     </header>
-
     <main class="py-12 md:py-0 mb-20">
       <section class="bg-purple-600 text-white py-8">
         <div class="container mx-auto px-4">
@@ -89,70 +140,154 @@
         </div>
       </section>
       <div class="container mx-auto px-4">
-        
-
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          <aside class="md:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit sticky top-28">
-            <h3 class="text-lg font-semibold mb-4 border-b pb-2">Navigasi Profil</h3>
+          <aside
+            class="md:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit sticky top-28"
+          >
+            <h3 class="text-lg font-semibold mb-4 border-b pb-2">
+              Navigasi Profil
+            </h3>
             <ul class="space-y-2 mt-4">
-              <li><a href="#sejarah" class="block text-gray-600 hover:text-indigo-600 font-medium px-4 py-2 rounded-md hover:bg-gray-100">Sejarah Sekolah</a></li>
-              <li><a href="#visi-misi" class="block text-gray-600 hover:text-indigo-600 font-medium px-4 py-2 rounded-md hover:bg-gray-100">Visi & Misi</a></li>
-              <li><a href="#struktur" class="block text-gray-600 hover:text-indigo-600 font-medium px-4 py-2 rounded-md hover:bg-gray-100">Struktur Organisasi</a></li>
-              <li><a href="#fasilitas" class="block text-gray-600 hover:text-indigo-600 font-medium px-4 py-2 rounded-md hover:bg-gray-100">Fasilitas</a></li>
+              <li>
+                <a
+                  href="#sejarah"
+                  class="block text-gray-600 hover:text-indigo-600 font-medium px-4 py-2 rounded-md hover:bg-gray-100"
+                  >Sejarah Sekolah</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#visi-misi"
+                  class="block text-gray-600 hover:text-indigo-600 font-medium px-4 py-2 rounded-md hover:bg-gray-100"
+                  >Visi & Misi</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#struktur"
+                  class="block text-gray-600 hover:text-indigo-600 font-medium px-4 py-2 rounded-md hover:bg-gray-100"
+                  >Struktur Organisasi</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#fasilitas"
+                  class="block text-gray-600 hover:text-indigo-600 font-medium px-4 py-2 rounded-md hover:bg-gray-100"
+                  >Fasilitas</a
+                >
+              </li>
             </ul>
           </aside>
-          
+
           <div class="md:col-span-2 space-y-12">
-            <section id="sejarah" class="bg-white p-8 rounded-lg shadow-md scroll-mt-24">
+            <section
+              id="sejarah"
+              class="bg-white p-8 rounded-lg shadow-md scroll-mt-24"
+            >
               <h2 class="text-2xl font-bold mb-4">Sejarah Sekolah</h2>
-              <img src="https://placehold.co/800x400/e2e8f0/374151" alt="Gedung sekolah" class="w-full h-auto rounded-lg mb-6">
+              <img
+                src="https://placehold.co/800x400/e2e8f0/374151"
+                alt="Gedung sekolah"
+                class="w-full h-auto rounded-lg mb-6"
+              />
               <p class="text-gray-600 leading-relaxed">
-                SMK Negeri 1 Dlanggu didirikan pada tahun XXXX dengan tujuan untuk menyediakan pendidikan kejuruan yang berkualitas bagi masyarakat di wilayah Mojokerto dan sekitarnya. Berawal dari beberapa program keahlian saja, sekolah ini terus berkembang pesat seiring berjalannya waktu.
-                <br><br>
-                Dengan komitmen tinggi dari para pendidik dan dukungan masyarakat, SMKN 1 Dlanggu telah berhasil mencetak ribuan lulusan yang kompeten dan siap kerja di berbagai industri. Berbagai prestasi, baik di tingkat regional maupun nasional, telah berhasil diraih sebagai bukti nyata dari kualitas pendidikan kami.
+                SMK Negeri 1 Dlanggu didirikan pada tahun XXXX dengan tujuan
+                untuk menyediakan pendidikan kejuruan yang berkualitas bagi
+                masyarakat di wilayah Mojokerto dan sekitarnya. Berawal dari
+                beberapa program keahlian saja, sekolah ini terus berkembang
+                pesat seiring berjalannya waktu.
+                <br /><br />
+                Dengan komitmen tinggi dari para pendidik dan dukungan
+                masyarakat, SMKN 1 Dlanggu telah berhasil mencetak ribuan
+                lulusan yang kompeten dan siap kerja di berbagai industri.
+                Berbagai prestasi, baik di tingkat regional maupun nasional,
+                telah berhasil diraih sebagai bukti nyata dari kualitas
+                pendidikan kami.
               </p>
             </section>
-            
-            <section id="visi-misi" class="bg-white p-8 rounded-lg shadow-md scroll-mt-24">
+
+            <section
+              id="visi-misi"
+              class="bg-white p-8 rounded-lg shadow-md scroll-mt-24"
+            >
               <h2 class="text-2xl font-bold mb-4">Visi & Misi</h2>
               <div class="space-y-6">
                 <div>
                   <h3 class="text-xl font-semibold text-indigo-600">Visi</h3>
-                  <p class="text-gray-700 mt-2 text-lg italic">"Terwujudnya Tamatan yang Berkarakter Mulia"</p>
+                  <p class="text-gray-700 mt-2 text-lg italic">
+                    "Terwujudnya Tamatan yang Berkarakter Mulia"
+                  </p>
                 </div>
                 <div>
                   <h3 class="text-xl font-semibold text-indigo-600">Misi</h3>
-                  <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600">
-                    <li>Mewujudkan jiwa beriman dan bertaqwa, mandiri, kerjasama, bernalar kritis, kreatif, bertanggung jawab, dan berkebhinekaan global.</li>
-                    <li>Melaksanakan kurikulum berstandar kompetensi sesuai kebutuhan IDUKA.</li>
-                    <li>Menumbuhkan sikap budaya kerja dan jiwa kewirausahaan di bidang pariwisata, seni dan teknologi.</li>
-                    <li>Meningkatkan profesionalisme tenaga pendidik dan kependidikan yang mempunyai standar kompetensi sesuai dengan konsentrasi keahlian.</li>
+                  <ol
+                    class="list-decimal list-inside mt-2 space-y-2 text-gray-600"
+                  >
+                    <li>
+                      Mewujudkan jiwa beriman dan bertaqwa, mandiri, kerjasama,
+                      bernalar kritis, kreatif, bertanggung jawab, dan
+                      berkebhinekaan global.
+                    </li>
+                    <li>
+                      Melaksanakan kurikulum berstandar kompetensi sesuai
+                      kebutuhan IDUKA.
+                    </li>
+                    <li>
+                      Menumbuhkan sikap budaya kerja dan jiwa kewirausahaan di
+                      bidang pariwisata, seni dan teknologi.
+                    </li>
+                    <li>
+                      Meningkatkan profesionalisme tenaga pendidik dan
+                      kependidikan yang mempunyai standar kompetensi sesuai
+                      dengan konsentrasi keahlian.
+                    </li>
                   </ol>
                 </div>
               </div>
             </section>
 
-            <section id="struktur" class="bg-white p-8 rounded-lg shadow-md scroll-mt-24">
+            <section
+              id="struktur"
+              class="bg-white p-8 rounded-lg shadow-md scroll-mt-24"
+            >
               <h2 class="text-2xl font-bold mb-4">Struktur Organisasi</h2>
               <p class="text-gray-600 leading-relaxed mb-6">
-                Berikut adalah struktur organisasi di SMKN 1 Dlanggu yang mendukung jalannya proses pendidikan yang efektif dan efisien.
+                Berikut adalah struktur organisasi di SMKN 1 Dlanggu yang
+                mendukung jalannya proses pendidikan yang efektif dan efisien.
               </p>
-              <img src="https://placehold.co/800x500/e2e8f0/374151?text=Bagan+Struktur+Organisasi" alt="Bagan struktur organisasi" class="w-full h-auto rounded-lg border">
+              <img
+                src="https://placehold.co/800x500/e2e8f0/374151?text=Bagan+Struktur+Organisasi"
+                alt="Bagan struktur organisasi"
+                class="w-full h-auto rounded-lg border"
+              />
             </section>
 
-            <section id="fasilitas" class="bg-white p-8 rounded-lg shadow-md scroll-mt-24">
+            <section
+              id="fasilitas"
+              class="bg-white p-8 rounded-lg shadow-md scroll-mt-24"
+            >
               <h2 class="text-2xl font-bold mb-4">Fasilitas Sekolah</h2>
-               <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div class="bg-gray-100 p-4 rounded-lg text-center font-medium"><p>Ruang Kelas Modern</p></div>
-                  <div class="bg-gray-100 p-4 rounded-lg text-center font-medium"><p>Perpustakaan Lengkap</p></div>
-                  <div class="bg-gray-100 p-4 rounded-lg text-center font-medium"><p>Laboratorium Komputer</p></div>
-                  <div class="bg-gray-100 p-4 rounded-lg text-center font-medium"><p>Bengkel Praktik</p></div>
-                  <div class="bg-gray-100 p-4 rounded-lg text-center font-medium"><p>Koneksi Internet Cepat</p></div>
-                  <div class="bg-gray-100 p-4 rounded-lg text-center font-medium"><p>Kantin Sehat</p></div>
-               </div>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="bg-gray-100 p-4 rounded-lg text-center font-medium">
+                  <p>Ruang Kelas Modern</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg text-center font-medium">
+                  <p>Perpustakaan Lengkap</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg text-center font-medium">
+                  <p>Laboratorium Komputer</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg text-center font-medium">
+                  <p>Bengkel Praktik</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg text-center font-medium">
+                  <p>Koneksi Internet Cepat</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg text-center font-medium">
+                  <p>Kantin Sehat</p>
+                </div>
+              </div>
             </section>
-
           </div>
         </div>
       </div>
