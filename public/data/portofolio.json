@@ -1,0 +1,230 @@
+{
+  "Rekayasa Perangkat Lunak": [
+    {
+      "nama": "Ahmad RPL",
+      "namaProject": "Sistem Kasir Online",
+      "deskripsiSingkat": "Aplikasi POS berbasis web untuk manajemen penjualan.",
+      "bekerja": "Tech Solutions Inc.",
+      "fotoProject": "https://picsum.photos/seed/rpl1/800/600",
+      "deskripsiLengkap": "Deskripsi lengkap tentang Sistem Kasir Online. Dibangun dengan stack MERN (MongoDB, Express, React, Node.js) untuk performa yang cepat dan antarmuka yang responsif.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Budi RPL",
+      "namaProject": "Aplikasi E-Learning",
+      "deskripsiSingkat": "Platform belajar online interaktif untuk siswa.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/rpl2/800/600",
+      "deskripsiLengkap": "Platform ini memungkinkan guru untuk mengunggah materi, membuat kuis, dan berinteraksi dengan siswa secara virtual. Menggunakan Firebase untuk otentikasi dan database real-time.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Gita RPL",
+      "namaProject": "Aplikasi Booking Online",
+      "deskripsiSingkat": "Sistem pemesanan jadwal untuk layanan jasa.",
+      "bekerja": "Startup Maju",
+      "fotoProject": "https://picsum.photos/seed/rpl3/800/600",
+      "deskripsiLengkap": "Aplikasi berbasis web yang memungkinkan klien memesan jadwal potong rambut, konsultasi, atau layanan lainnya secara online dengan mudah.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Hadi RPL",
+      "namaProject": "Game Edukasi Mobile",
+      "deskripsiSingkat": "Game Android untuk belajar matematika dasar.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/rpl4/800/600",
+      "deskripsiLengkap": "Dibangun dengan Unity, game ini mengajarkan anak-anak konsep penjumlahan dan pengurangan melalui gameplay yang menyenangkan dan interaktif.",
+      "linkProject": "#"
+    }
+  ],
+  "Teknik Komputer dan Jaringan": [
+    {
+      "nama": "Citra TKJ",
+      "namaProject": "Monitoring Jaringan Cerdas",
+      "deskripsiSingkat": "Sistem monitoring jaringan berbasis IoT.",
+      "bekerja": "NetCore Provider",
+      "fotoProject": "https://picsum.photos/seed/tkj1/800/600",
+      "deskripsiLengkap": "Proyek ini menggunakan Raspberry Pi dan sensor untuk memantau kesehatan jaringan secara real-time, mengirimkan notifikasi jika terjadi anomali. Data divisualisasikan menggunakan Grafana.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Doni TKJ",
+      "namaProject": "Keamanan Jaringan Mikrotik",
+      "deskripsiSingkat": "Implementasi firewall dan VPN pada router Mikrotik.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/tkj2/800/600",
+      "deskripsiLengkap": "Konfigurasi keamanan jaringan untuk usaha kecil menengah (UKM) menggunakan router Mikrotik, termasuk pengaturan firewall, manajemen bandwidth, dan koneksi VPN untuk akses jarak jauh yang aman.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Indra TKJ",
+      "namaProject": "Instalasi Server VoIP",
+      "deskripsiSingkat": "Membangun sistem teleponi berbasis IP untuk kantor.",
+      "bekerja": "Solusi Komunika",
+      "fotoProject": "https://picsum.photos/seed/tkj3/800/600",
+      "deskripsiLengkap": "Implementasi Asterisk pada server lokal untuk menciptakan sistem PBX internal yang hemat biaya dan kaya fitur untuk komunikasi internal perusahaan.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Joko TKJ",
+      "namaProject": "Manajemen Hotspot Cafe",
+      "deskripsiSingkat": "Setup sistem login hotspot dengan manajemen user.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/tkj4/800/600",
+      "deskripsiLengkap": "Menggunakan RouterOS Mikrotik untuk membuat sistem hotspot cafe yang aman, lengkap dengan halaman login, voucher, dan pembatasan bandwidth per pengguna.",
+      "linkProject": "#"
+    }
+  ],
+  "Desain Komunikasi Visual": [
+    {
+      "nama": "Eka DKV",
+      "namaProject": "Branding Kopi Lokal",
+      "deskripsiSingkat": "Desain identitas visual untuk brand kopi.",
+      "bekerja": "Creative Studio",
+      "fotoProject": "https://picsum.photos/seed/dkv1/800/600",
+      "deskripsiLengkap": "Proyek branding ini mencakup desain logo, kemasan, materi promosi, dan panduan gaya visual untuk membantu brand kopi lokal bersaing di pasar.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Fani DKV",
+      "namaProject": "Animasi 2D Edukatif",
+      "deskripsiSingkat": "Video animasi untuk pembelajaran anak-anak.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/dkv2/800/600",
+      "deskripsiLengkap": "Sebuah video animasi pendek yang menjelaskan konsep sains dasar kepada anak-anak dengan cara yang menyenangkan dan mudah dipahami. Dibuat menggunakan Adobe After Effects dan Illustrator.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Kevin DKV",
+      "namaProject": "Desain UI/UX Aplikasi Mobile",
+      "deskripsiSingkat": "Prototype desain antarmuka aplikasi traveling.",
+      "bekerja": "UI/UX Agency",
+      "fotoProject": "https://picsum.photos/seed/dkv3/800/600",
+      "deskripsiLengkap": "Merancang alur pengguna dan desain visual untuk aplikasi mobile pemesanan tiket. Dibuat menggunakan Figma, fokus pada kemudahan penggunaan dan estetika.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Lina DKV",
+      "namaProject": "Fotografi Produk",
+      "deskripsiSingkat": "Sesi foto profesional untuk produk fashion lokal.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/dkv4/800/600",
+      "deskripsiLengkap": "Menghasilkan serangkaian foto berkualitas tinggi untuk katalog online dan media sosial, menonjolkan detail dan kualitas produk fashion.",
+      "linkProject": "#"
+    }
+  ],
+  "Animasi": [
+    {
+      "nama": "Mira Animasi",
+      "namaProject": "Film Pendek 3D 'Petualangan Kiko'",
+      "deskripsiSingkat": "Sebuah film animasi 3D tentang persahabatan.",
+      "bekerja": "DreamWorks Animation",
+      "fotoProject": "https://picsum.photos/seed/anim1/800/600",
+      "deskripsiLengkap": "Proyek akhir yang mencakup seluruh proses produksi 3D, mulai dari modeling, texturing, rigging, animasi, hingga rendering menggunakan Blender.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Nino Animasi",
+      "namaProject": "Motion Graphic Iklan Minuman",
+      "deskripsiSingkat": "Iklan animasi 2D untuk produk minuman energi.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/anim2/800/600",
+      "deskripsiLengkap": "Video motion graphic berdurasi 30 detik yang dinamis dan penuh warna, dibuat dengan Adobe After Effects untuk promosi di media sosial.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Olivia Animasi",
+      "namaProject": "Karakter Rigging untuk Game",
+      "deskripsiSingkat": "Membuat sistem tulang (rig) untuk karakter game.",
+      "bekerja": "GameDev Studio",
+      "fotoProject": "https://picsum.photos/seed/anim3/800/600",
+      "deskripsiLengkap": "Merancang dan mengimplementasikan rig yang kompleks pada model karakter 3D agar dapat dianimasikan dengan luwes oleh animator di dalam game engine.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Putra Animasi",
+      "namaProject": "Visual Effects (VFX) Ledakan",
+      "deskripsiSingkat": "Simulasi efek ledakan realistis untuk film.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/anim4/800/600",
+      "deskripsiLengkap": "Menggunakan Houdini untuk menciptakan simulasi api, asap, dan partikel untuk menghasilkan efek ledakan yang dapat diintegrasikan ke dalam rekaman live-action.",
+      "linkProject": "#"
+    }
+  ],
+  "Kuliner": [
+    {
+      "nama": "Rina Kuliner",
+      "namaProject": "Inovasi Kue Tradisional",
+      "deskripsiSingkat": "Kreasi modern dari kue putu ayu.",
+      "bekerja": "Pattiserie de Rina",
+      "fotoProject": "https://picsum.photos/seed/kul1/800/600",
+      "deskripsiLengkap": "Mengembangkan resep kue putu ayu dengan varian rasa baru seperti green tea dan red velvet, serta presentasi yang lebih modern dan menarik.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Sandi Kuliner",
+      "namaProject": "Menu Sehat Katering Kantor",
+      "deskripsiSingkat": "Pengembangan paket menu makan siang sehat.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/kul2/800/600",
+      "deskripsiLengkap": "Merancang siklus menu selama satu bulan untuk katering perkantoran yang seimbang secara nutrisi, lezat, dan menggunakan bahan-bahan segar.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Tia Kuliner",
+      "namaProject": "Teknik Sous-vide Steak",
+      "deskripsiSingkat": "Eksplorasi teknik memasak modern untuk daging.",
+      "bekerja": "The Steak House",
+      "fotoProject": "https://picsum.photos/seed/kul3/800/600",
+      "deskripsiLengkap": "Riset dan penerapan teknik sous-vide untuk menghasilkan tingkat kematangan steak yang sempurna dan konsisten setiap saat.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Umar Kuliner",
+      "namaProject": "Manajemen Food Cost",
+      "deskripsiSingkat": "Analisis dan strategi menekan biaya bahan baku.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/kul4/800/600",
+      "deskripsiLengkap": "Membuat sistem perhitungan HPP (Harga Pokok Penjualan) untuk setiap menu di restoran dan memberikan rekomendasi untuk efisiensi tanpa mengurangi kualitas.",
+      "linkProject": "#"
+    }
+  ],
+  "Perhotelan": [
+    {
+      "nama": "Vina Perhotelan",
+      "namaProject": "Paket Wisata Eco-tourism",
+      "deskripsiSingkat": "Merancang paket liburan ramah lingkungan.",
+      "bekerja": "Grand Hyatt",
+      "fotoProject": "https://picsum.photos/seed/photel1/800/600",
+      "deskripsiLengkap": "Membuat itinerary paket wisata 3 hari 2 malam yang bekerja sama dengan komunitas lokal dan mempromosikan kelestarian alam sebagai daya tarik utama.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Wawan Perhotelan",
+      "namaProject": "SOP Pelayanan Front Office",
+      "deskripsiSingkat": "Membuat standar operasional untuk resepsionis.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/photel2/800/600",
+      "deskripsiLengkap": "Menyusun buku panduan SOP yang detail untuk proses check-in, check-out, dan penanganan keluhan tamu untuk meningkatkan kepuasan pelanggan.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Yulia Perhotelan",
+      "namaProject": "Manajemen Acara Pernikahan",
+      "deskripsiSingkat": "Studi kasus perencanaan acara pernikahan di hotel.",
+      "bekerja": "Marriott Hotels",
+      "fotoProject": "https://picsum.photos/seed/photel3/800/600",
+      "deskripsiLengkap": "Proyek simulasi perencanaan acara pernikahan dari awal hingga akhir, mencakup budgeting, koordinasi vendor, dan manajemen hari-H.",
+      "linkProject": "#"
+    },
+    {
+      "nama": "Zaki Perhotelan",
+      "namaProject": "Strategi Digital Marketing Hotel",
+      "deskripsiSingkat": "Rencana pemasaran online untuk meningkatkan okupansi.",
+      "bekerja": null,
+      "fotoProject": "https://picsum.photos/seed/photel4/800/600",
+      "deskripsiLengkap": "Mengusulkan strategi kampanye media sosial, optimasi OTA (Online Travel Agent), dan promosi email marketing untuk menarik lebih banyak tamu.",
+      "linkProject": "#"
+    }
+  ]
+}
