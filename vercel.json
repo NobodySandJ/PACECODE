@@ -1,0 +1,8 @@
+{
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/profil", "destination": "/profil.html" },
+    { "source": "/jurusan", "destination": "/jurusan.html" },
+    { "source": "/portofolio", "destination": "/portofolio.html" }
+  ]
+}
