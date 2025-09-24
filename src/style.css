@@ -35,7 +35,13 @@
   .btn-white:hover::before {
     @apply w-[300%] h-[300%];
   }
+
+  /* Tombol Floating untuk Navigasi Cepat (diperbarui) */
+  .fab-container {
+    @apply fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3;
+  }
+
+  .fab-button {
+    @apply px-5 py-3 rounded-full text-white flex items-center justify-center shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl text-xs font-bold tracking-wider;
+  }
 }
-
-
-

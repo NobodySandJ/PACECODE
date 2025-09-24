@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portofolio Siswa - PACECODE</title>
+    <title>Portofolio Siswa - SMKN 1 Dlanggu</title>
     <link rel="stylesheet" href="/src/style.css" />
     <link rel="icon" type="image/png" href="/assets/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,6 +14,15 @@
 </head>
 
 <body class="bg-gray-100 font-['Poppins',_sans-serif]">
+
+    <div class="fab-container">
+        <a href="#sudah-bekerja" class="fab-button bg-green-500 hover:bg-green-600" title="Lihat Lulusan Siap Kerja">
+            SUDAH BEKERJA
+        </a>
+        <a href="#belum-bekerja" class="fab-button bg-blue-500 hover:bg-blue-600" title="Lihat Calon Profesional">
+            BELUM BEKERJA
+        </a>
+    </div>
 
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <nav class="container mx-auto px-4 py-2 flex justify-between items-center">
@@ -80,7 +89,7 @@
                 </li>
                 <li>
                     <a href="portofolio.html"
-                        class="relative hover:text-indigo-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-indigo-600 after:transition-all after:duration-300 hover:after:w-full">Portfolio</a>
+                        class="relative hover:text-indigo-600 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-[2px] after:bg-indigo-600 after:transition-all after:duration-300 hover:after:w-full font-bold text-indigo-600">Portfolio</a>
                 </li>
             </ul>
 
@@ -91,31 +100,32 @@
     </header>
 
     <main class="container mx-auto px-6 py-8">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-4">Portofolio Karya Siswa</h1>
-        <p id="nama-jurusan" class="text-center text-xl text-gray-600 mb-8"></p>
-
-        <div id="jurusan-filters" class="flex justify-center flex-wrap gap-2 mb-12">
-        </div>
-
-        <div class="flex justify-center gap-4 mb-12">
-            <a href="#sudah-bekerja"
-                class="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Lihat yang Sudah
-                Bekerja</a>
-            <a href="#belum-bekerja"
-                class="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transition">Lihat yang Belum
-                Bekerja</a>
-        </div>
-
-        <section id="sudah-bekerja" class="mb-16">
-            <h2 class="text-3xl font-semibold text-gray-700 mb-6 border-l-4 border-green-500 pl-4">Sudah Bekerja</h2>
-            <div id="sudah-bekerja-container"
-                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        <section class="text-center mb-16">
+            <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Galeri Karya Terbaik Siswa</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Jelajahi proyek-proyek inovatif dan kreatif dari para siswa berprestasi kami di berbagai bidang keahlian.
+            </p>
         </section>
 
-        <section id="belum-bekerja">
-            <h2 class="text-3xl font-semibold text-gray-700 mb-6 border-l-4 border-red-500 pl-4">Belum Bekerja</h2>
+        <div id="jurusan-filters" class="flex justify-center flex-wrap gap-3 mb-12">
+        </div>
+        
+        <section id="sudah-bekerja" class="mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center">✔</span>
+                Lulusan Siap Kerja
+            </h2>
+            <div id="sudah-bekerja-container"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+        </section>
+
+        <section id="belum-bekerja" class="scroll-mt-20">
+             <h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">✨</span>
+                Bakat & Calon Profesional
+            </h2>
             <div id="belum-bekerja-container"
-                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
         </section>
     </main>
 
@@ -134,6 +144,23 @@
             </div>
         </div>
     </div>
+    
+    <section class="bg-white py-20 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Tertarik dengan Talenta Kami?</h2>
+            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                Lulusan kami siap untuk berkontribusi di dunia industri. Hubungi kami untuk kerja sama, rekrutmen, atau informasi lebih lanjut.
+            </p>
+            <div class="flex justify-center gap-4">
+                <button class="btn-animated group">
+                    <span class="relative z-10">Hubungi Kami</span>
+                </button>
+                <a href="#sudah-bekerja" class="px-6 py-3 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition font-medium">
+                    Lihat Lulusan
+                </a>
+            </div>
+        </div>
+    </section>
 
     <footer class="bg-gray-800 text-gray-300">
       <div class="container mx-auto px-4 py-16 grid md:grid-cols-4 gap-8">
