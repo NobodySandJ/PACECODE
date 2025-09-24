@@ -176,12 +176,17 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('flex');
     };
 
-    closeModalBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
+    // PERBAIKAN: Tambahkan pengecekan sebelum menambahkan event listener
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
 
     loadPortfolioData();
 });

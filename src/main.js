@@ -1,7 +1,4 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
 import ScrollReveal from 'scrollreveal';
 
 // Inisialisasi ScrollReveal
@@ -11,7 +8,6 @@ const sr = ScrollReveal({
     delay: 700,
 });
 
-// Menerapkan animasi ke semua elemen <section>
 sr.reveal('.seksikepsek', {
     delay: 500,
     origin: 'bottom',
@@ -20,15 +16,21 @@ sr.reveal('.seksikepsek', {
     reset: true
 });
 
-// Kamu juga bisa menambahkan animasi spesifik lainnya di sini
-// sr.reveal('.headline');
-
-// ===================================
-// NAVBAR DROPDOWN LOGIC
-// ===================================
 document.addEventListener('DOMContentLoaded', () => {
-    const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
+    // ===================================
+    // LOGIKA BARU: MENU HAMBURGER MOBILE
+    // ===================================
+    const hamburgerButton = document.getElementById('hamburger-button');
+    const mobileMenu = document.getElementById('mobile-menu');
 
+    hamburgerButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // ===================================
+    // LOGIKA LAMA: NAVBAR DROPDOWN DESKTOP
+    // ===================================
+    const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
     const closeAllDropdowns = () => {
         document.querySelectorAll('.dropdown-panel').forEach(panel => {
             panel.classList.remove('visible', 'opacity-100', 'translate-y-0');
@@ -39,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dropdownLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation(); // Mencegah klik menyebar ke document
+            e.stopPropagation();
 
             const targetPanel = link.nextElementSibling;
             const isTargetPanelOpen = !targetPanel.classList.contains('invisible');
@@ -53,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Tutup semua dropdown jika klik di luar
     document.addEventListener('click', () => {
         closeAllDropdowns();
     });
