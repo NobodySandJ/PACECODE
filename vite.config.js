@@ -13,6 +13,8 @@ export default defineConfig({
         profil: resolve(__dirname, 'profil.html'),
         jurusan: resolve(__dirname, 'jurusan.html'),
         portofolio: resolve(__dirname, 'portofolio.html'),
+        berita: resolve(__dirname, 'berita.html'),
+        fasilitas: resolve(__dirname, 'fasilitas.html'),
       },
     },
   },
