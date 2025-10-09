@@ -58,4 +58,100 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', () => {
         closeAllDropdowns();
     });
+    // ===================================
+  // LOGIKA TAMPILAN PORTOFOLIO DI INDEX
+  // ===================================
+  const portfolioContainerIndex = document.getElementById(
+    "portfolio-container-index"
+  );
+  const jurusanFiltersIndex = document.getElementById("jurusan-filters-index");
+
+  if (portfolioContainerIndex && jurusanFiltersIndex) {
+    let portfolioData = {};
+    let jurusanSaatIni = "";
+
+    async function loadPortfolioData() {
+      try {
+        const response = await fetch("/data/portofolio.json");
+        if (!response.ok) {
+           throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        portfolioData = await response.json();
+        jurusanSaatIni = Object.keys(portfolioData)[0]; // Tampilkan jurusan pertama sebagai default
+        setupJurusanFilters();
+        renderPortfolio(jurusanSaatIni);
+      } catch (error) {
+        console.error("Gagal memuat data portofolio:", error);
+        portfolioContainerIndex.innerHTML = `<p class="text-center text-red-500 col-span-full">Gagal memuat data portofolio. Pastikan file JSON ada dan dapat diakses.</p>`;
+      }
+    }
+
+    function renderPortfolio(jurusan) {
+      portfolioContainerIndex.innerHTML = "";
+      const dataJurusan = portfolioData[jurusan];
+      if (!dataJurusan) return;
+
+      // Ambil 4 item pertama dari data
+      const slicedData = dataJurusan.slice(0, 4);
+
+      slicedData.forEach((item) => {
+        const card = createPortfolioCard(item);
+        portfolioContainerIndex.appendChild(card);
+      });
+    }
+
+    function createPortfolioCard(data) {
+      const card = document.createElement("div");
+      card.className =
+        "bg-white rounded-lg shadow-md overflow-hidden group transform transition-all duration-300 hover:-translate-y-2";
+
+      card.innerHTML = `
+              <div class="relative">
+                  <img src="${data.fotoProject}" alt="${data.namaProject}" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+              </div>
+              <div class="p-5">
+                  <h3 class="text-lg font-bold text-gray-800 truncate">${data.namaProject}</h3>
+                  <p class="text-sm text-gray-500 mb-3">oleh ${data.nama}</p>
+                  <a href="portofolio.html" class="text-sm font-semibold text-purple-600 hover:text-purple-800">Lihat Detail →</a>
+              </div>
+            `;
+      return card;
+    }
+
+    function setupJurusanFilters() {
+      jurusanFiltersIndex.innerHTML = "";
+      const jurusanKeys = Object.keys(portfolioData);
+      jurusanKeys.forEach((jurusan) => {
+        const button = document.createElement("button");
+        button.textContent = jurusan;
+        button.className =
+          "px-4 py-2 text-sm font-medium rounded-full transition";
+        if (jurusan === jurusanSaatIni) {
+          button.classList.add("bg-purple-600", "text-white");
+        } else {
+          button.classList.add("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
+        }
+
+        button.addEventListener("click", () => {
+          jurusanSaatIni = jurusan;
+          renderPortfolio(jurusan);
+          updateFilterButtons();
+        });
+        jurusanFiltersIndex.appendChild(button);
+      });
+    }
+
+    function updateFilterButtons() {
+      Array.from(jurusanFiltersIndex.children).forEach((button) => {
+        button.classList.remove("bg-purple-600", "text-white");
+        button.classList.add("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
+        if (button.textContent === jurusanSaatIni) {
+          button.classList.add("bg-purple-600", "text-white");
+          button.classList.remove("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
+        }
+      });
+    }
+
+    loadPortfolioData();
+  }
 });
