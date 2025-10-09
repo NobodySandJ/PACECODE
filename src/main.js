@@ -23,7 +23,6 @@ const setActiveLink = () => {
         link.classList.remove('active-nav');
         const linkPath = cleanPath(new URL(link.href).pathname);
 
-        // Menambahkan kondisi untuk halaman fasilitas
         if (linkPath === currentPath || (currentPath === '/fasilitas.html' && linkPath === '/profil.html')) {
             link.classList.add('active-nav');
         }
@@ -36,50 +35,67 @@ const setActiveLink = () => {
         const linkPath = cleanPath(new URL(link.href).pathname);
         const hasHash = new URL(link.href).hash !== '';
 
-        // Hanya tandai link utama (yang tidak punya hash) atau
-        // link lain yang path-nya cocok
         if (linkPath === currentPath && !hasHash) {
             link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
         }
         
-        // Kondisi khusus untuk halaman fasilitas, tandai "Profil" sebagai aktif
         if (currentPath === '/fasilitas.html' && linkPath === '/profil.html' && !hasHash) {
             link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
         }
     });
 };
 
-// Inisialisasi ScrollReveal
+// ===================================
+// INISIALISASI SCROLL REVEAL
+// ===================================
 const sr = ScrollReveal({
     distance: '60px',
-    duration: 1000,
-    delay: 700,
+    duration: 2500, // Durasi animasi lebih lama untuk efek lebih halus
+    delay: 400,
+    reset: true, // Animasi akan berulang setiap kali elemen masuk viewport
 });
 
-sr.reveal('.seksikepsek', {
-    delay: 500,
-    origin: 'bottom',
-    opacity: 0,
-    easing: 'ease-in-out',
-    reset: true
-});
+// Animasi untuk halaman index.html
+if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+    // Hero Section
+    sr.reveal('section h1', { delay: 500, origin: 'top' });
+    sr.reveal('section .text-lg', { delay: 600, origin: 'bottom' });
+    sr.reveal('section .btn-animated', { delay: 700, origin: 'bottom' });
+
+    // Sambutan Kepala Sekolah
+    sr.reveal('.seksikepsek .relative', { delay: 500, origin: 'left' });
+    sr.reveal('.seksikepsek div:not(.relative)', { delay: 600, origin: 'right' });
+
+    // Visi & Misi
+    sr.reveal('.bg-gray-50 .grid > div:nth-child(1)', { delay: 500, origin: 'left' });
+    sr.reveal('.bg-gray-50 .grid > div:nth-child(2)', { delay: 600, origin: 'right' });
+    
+    // Kegiatan Terbaru
+    sr.reveal('.bg-white .text-center h2', { delay: 200, origin: 'top' });
+    sr.reveal('.bg-white .grid.md\\:grid-cols-3 .group', { delay: 300, origin: 'bottom', interval: 200 });
+    
+    // Portofolio
+    sr.reveal('section.bg-gray-50:nth-of-type(2) h2', { delay: 200, origin: 'top' });
+    sr.reveal('#jurusan-filters-index button', { delay: 300, origin: 'bottom', interval: 100 });
+    sr.reveal('#portfolio-container-index > div', { delay: 500, origin: 'bottom', interval: 200 });
+    
+    // FAQ
+    sr.reveal('.bg-white section:last-of-type img', { delay: 500, origin: 'left' });
+    sr.reveal('.bg-white section:last-of-type details', { delay: 600, origin: 'right', interval: 200 });
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ===================================
-    // LOGIKA UMUM (dijalankan di semua halaman)
-    // ===================================
     const hamburgerButton = document.getElementById('hamburger-button');
     const mobileMenu = document.getElementById('mobile-menu');
     const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
 
-    // 1. Logika Hamburger
     if (hamburgerButton && mobileMenu) {
         hamburgerButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
     }
 
-    // 2. Logika Dropdown Desktop
     const closeAllDropdowns = () => {
         document.querySelectorAll('.dropdown-panel').forEach(panel => {
             panel.classList.remove('visible', 'opacity-100', 'translate-y-0');
@@ -103,12 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', () => closeAllDropdowns());
     
-    // 3. Panggil fungsi untuk menandai navigasi aktif
     setActiveLink();
     
-    // ===================================
-    // LOGIKA DROPDOWN MOBILE
-    // ===================================
     const dropdownLinksMobile = document.querySelectorAll('.nav-link-dropdown-mobile');
 
     dropdownLinksMobile.forEach(link => {
@@ -122,9 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ===================================
-    // LOGIKA TAMPILAN PORTOFOLIO DI INDEX (Halaman Utama)
-    // ===================================
     const portfolioContainerIndex = document.getElementById("portfolio-container-index");
     const jurusanFiltersIndex = document.getElementById("jurusan-filters-index");
 
@@ -155,6 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = createPortfolioCard(item);
                 portfolioContainerIndex.appendChild(card);
             });
+            // Re-apply reveal ke elemen baru
+            sr.reveal('#portfolio-container-index > div', { delay: 200, origin: 'bottom', interval: 100, cleanup: true });
         }
 
         function createPortfolioCard(data) {

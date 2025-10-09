@@ -1,10 +1,8 @@
 import './style.css';
+import { initScrollReveal } from './animation.js';
 
-// ===================================
-// NAVBAR DROPDOWN LOGIC
-// ===================================
-// Pastikan dropdown di header tetap berfungsi
-document.addEventListener('DOMContentLoaded', () => {
+// Fungsi untuk logika dropdown navbar dan event listener lainnya
+function setupUIListeners() {
     const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
     const closeAllDropdowns = () => {
         document.querySelectorAll('.dropdown-panel').forEach(panel => {
@@ -26,14 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     document.addEventListener('click', () => closeAllDropdowns());
-});
+}
 
-// ===================================
-// JURUSAN PAGE DYNAMIC CONTENT LOGIC
-// ===================================
-async function initJurusanPage() {
+// Fungsi untuk memuat konten jurusan dari JSON dan menampilkannya
+async function loadJurusanContent() {
     const params = new URLSearchParams(window.location.search);
-    const currentJurusanId = params.get('id');
+    // Default ke 'rpl' jika tidak ada parameter id di URL
+    const currentJurusanId = params.get('id') || 'rpl';
 
     const contentJurusan = document.getElementById('content-jurusan');
     const contentError = document.getElementById('content-error');
@@ -43,10 +40,8 @@ async function initJurusanPage() {
         if (!response.ok) throw new Error('Data tidak ditemukan');
         const allJurusanData = await response.json();
 
-        // 1. Isi Sidebar Navigasi
         populateSidebar(allJurusanData, currentJurusanId);
 
-        // 2. Tampilkan konten jurusan yang dipilih
         const currentData = allJurusanData[currentJurusanId];
         if (currentData) {
             populateMainContent(currentData);
@@ -67,7 +62,7 @@ async function initJurusanPage() {
 
 function populateSidebar(allData, currentId) {
     const sidebarList = document.getElementById('jurusan-list-sidebar');
-    sidebarList.innerHTML = ''; // Kosongkan list
+    sidebarList.innerHTML = ''; 
 
     for (const id in allData) {
         const jurusan = allData[id];
@@ -79,10 +74,8 @@ function populateSidebar(allData, currentId) {
         a.className = 'block px-3 py-2 rounded-md font-medium transition-colors duration-200';
 
         if (id === currentId) {
-            // Style untuk link yang aktif
             a.classList.add('bg-purple-600', 'text-white');
         } else {
-            // Style untuk link yang tidak aktif
             a.classList.add('text-gray-700', 'hover:bg-gray-100');
         }
         
@@ -91,53 +84,53 @@ function populateSidebar(allData, currentId) {
     }
 }
 
-// Ganti fungsi populateMainContent yang lama dengan yang ini
 function populateMainContent(data) {
-    // Ubah judul halaman
     document.title = `${data.nama} - SMKN 1 Dlanggu`;
-
-    // Isi breadcrumb
     document.getElementById('breadcrumb').textContent = `Home / Jurusan / ${data.nama}`;
-    
-    // Isi konten utama
     document.getElementById('nama-jurusan').textContent = data.nama;
     document.getElementById('deskripsi-jurusan').textContent = data.deskripsi;
     
-    // Set gambar utama (ambil gambar pertama dari galeri)
     if (data.gallery && data.gallery.length > 0) {
         document.getElementById('gambar-utama').src = data.gallery[0];
     }
 
-    // Isi daftar keahlian
     const keahlianList = document.getElementById('keahlian-list');
-    keahlianList.innerHTML = ''; // Kosongkan daftar
+    keahlianList.innerHTML = '';
     data.keahlian.forEach(skill => {
         const li = document.createElement('li');
         li.textContent = skill;
         keahlianList.appendChild(li);
     });
 
-    // ===================================
-    // KODE BARU UNTUK MENAMPILKAN GURU
-    // ===================================
     const guruSection = document.getElementById('guru-section');
     const guruGrid = document.getElementById('guru-grid');
-    guruGrid.innerHTML = ''; // Kosongkan grid
+    guruGrid.innerHTML = '';
 
     if (data.guru && data.guru.length > 0) {
-        guruSection.classList.remove('hidden'); // Tampilkan section jika ada data guru
+        guruSection.classList.remove('hidden');
         data.guru.forEach(guru => {
             const guruCard = document.createElement('div');
             guruCard.innerHTML = `
-                <img src="${guru.foto}" alt="${guru.nama}" class="w-100 h-50 rounded-lg mx-auto object-cover shadow-md mb-2">
+                <img src="${guru.foto}" alt="${guru.nama}" class="w-full h-48 object-cover rounded-lg mx-auto shadow-md mb-2">
                 <p class="font-semibold text-sm text-gray-700">${guru.nama}</p>
             `;
             guruGrid.appendChild(guruCard);
         });
     } else {
-        guruSection.classList.add('hidden'); // Sembunyikan section jika tidak ada data guru
+        guruSection.classList.add('hidden');
     }
 }
 
-// Jalankan semua fungsi saat halaman dimuat
-document.addEventListener('DOMContentLoaded', initJurusanPage);
+// ===================================
+// INISIALISASI HALAMAN
+// ===================================
+document.addEventListener('DOMContentLoaded', async () => {
+    // Jalankan setup UI yang statis terlebih dahulu
+    setupUIListeners();
+
+    // 1. Tunggu (await) sampai semua konten dinamis selesai dimuat
+    await loadJurusanContent();
+
+    // 2. Setelah konten dijamin ada, baru jalankan animasi
+    initScrollReveal();
+});
