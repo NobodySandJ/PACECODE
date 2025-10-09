@@ -8,7 +8,7 @@ import { initScrollReveal } from './animation.js';
 const setActiveLink = () => {
     const cleanPath = (path) => {
         if (path.endsWith('index.html')) {
-            return path.substring(0, path.length - 'index.html'.length);
+            return '/';
         }
         if (path.length > 1 && path.endsWith('/')) {
             return path.slice(0, -1);
@@ -17,6 +17,8 @@ const setActiveLink = () => {
     };
 
     const currentPath = cleanPath(window.location.pathname);
+    // Array halaman yang berada di bawah "Profil"
+    const profileSubPages = ['/fasilitas.html', '/guru.html', '/galeri.html'];
 
     // --- Menu Desktop ---
     const desktopLinks = document.querySelectorAll('header > nav .nav-link');
@@ -24,7 +26,10 @@ const setActiveLink = () => {
         link.classList.remove('active-nav');
         const linkPath = cleanPath(new URL(link.href).pathname);
 
-        if (linkPath === currentPath || (currentPath === '/fasilitas.html' && linkPath === '/profil.html')) {
+        // Logika yang diperbarui:
+        // Aktifkan link jika path-nya cocok,
+        // ATAU jika kita sedang berada di salah satu sub-halaman profil DAN link ini adalah link "Profil"
+        if (linkPath === currentPath || (profileSubPages.includes(currentPath) && linkPath === '/profil.html')) {
             link.classList.add('active-nav');
         }
     });
@@ -40,13 +45,12 @@ const setActiveLink = () => {
             link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
         }
         
-        if (currentPath === '/fasilitas.html' && linkPath === '/profil.html' && !hasHash) {
+        // Logika yang diperbarui untuk mobile
+        if (profileSubPages.includes(currentPath) && linkPath === '/profil.html' && !hasHash) {
             link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
         }
     });
 };
-
-// Hapus semua inisialisasi ScrollReveal dari file ini untuk menghindari konflik
 
 document.addEventListener('DOMContentLoaded', () => {
     const hamburgerButton = document.getElementById('hamburger-button');
@@ -127,7 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = createPortfolioCard(item);
                 portfolioContainerIndex.appendChild(card);
             });
-            // Tidak perlu re-apply sr.reveal di sini karena akan di-handle oleh initScrollReveal
         }
 
         function createPortfolioCard(data) {
@@ -181,6 +184,5 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPortfolioData();
     }
     
-    // Panggil fungsi inisialisasi animasi SATU KALI di akhir setelah DOM siap
     initScrollReveal();
 });

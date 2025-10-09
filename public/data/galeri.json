@@ -1,0 +1,188 @@
+{
+  "Kegiatan Sekolah": [
+    {
+      "image": "https://placehold.co/600x400/1abc9c/ffffff?text=Rapat+OSIS",
+      "title": "Rapat OSIS",
+      "description": "Kegiatan rapat rutin OSIS untuk membahas program kerja."
+    },
+    {
+      "image": "https://placehold.co/600x400/3498db/ffffff?text=Sosialisasi+Industri",
+      "title": "Sosialisasi Dunia Industri",
+      "description": "Siswa mendapatkan pengarahan dari praktisi industri."
+    },
+    {
+      "image": "https://placehold.co/600x400/9b59b6/ffffff?text=HUT+Sekolah",
+      "title": "Perayaan HUT Sekolah",
+      "description": "Momen perayaan ulang tahun sekolah yang meriah."
+    },
+    {
+      "image": "https://placehold.co/600x400/2c3e50/ffffff?text=Upacara+Bendera",
+      "title": "Upacara Bendera",
+      "description": "Pelaksanaan upacara bendera setiap hari Senin."
+    },
+    {
+      "image": "https://placehold.co/600x400/27ae60/ffffff?text=Pentas+Seni",
+      "title": "Pentas Seni Budaya",
+      "description": "Siswa menampilkan tari dan musik tradisional dalam pentas seni."
+    },
+    {
+      "image": "https://placehold.co/600x400/e67e22/ffffff?text=Workshop+Guru",
+      "title": "Workshop Pengembangan Guru",
+      "description": "Pelatihan metode pengajaran kreatif untuk guru-guru."
+    },
+    {
+      "image": "https://placehold.co/600x400/f39c12/ffffff?text=Pelantikan+Kadet",
+      "title": "Pelantikan Pengurus OSIS Baru",
+      "description": "Serah terima jabatan pengurus OSIS dan pembinaan organisasi."
+    },
+    {
+      "image": "https://placehold.co/600x400/16a085/ffffff?text=Pameran+Siswa",
+      "title": "Pameran Karya Siswa",
+      "description": "Pameran proyek akhir jurusan desain, kuliner, dan RPL."
+    },
+    {
+      "image": "https://placehold.co/600x400/2980b9/ffffff?text=Seminar+Karir",
+      "title": "Seminar Karir & Beasiswa",
+      "description": "Pembicara dari universitas dan industri memberi tips melanjutkan studi."
+    },
+    {
+      "image": "https://placehold.co/600x400/8e44ad/ffffff?text=Jalan+Sehat",
+      "title": "Jalan Sehat Keluarga Sekolah",
+      "description": "Acara olahraga bersama untuk kesehatan siswa dan wali murid."
+    },
+    {
+      "image": "https://placehold.co/600x400/c0392b/ffffff?text=Pengumuman+Kelulusan",
+      "title": "Pengumuman Kelulusan",
+      "description": "Suasana pengumuman kelulusan siswa kelas XII."
+    },
+    {
+      "image": "https://placehold.co/600x400/2ecc71/ffffff?text=Pembinaan+Karakter",
+      "title": "Pembinaan Karakter",
+      "description": "Kegiatan rutin untuk meningkatkan kedisiplinan dan karakter siswa."
+    }
+  ],
+  "Kegiatan Praktek": [
+    {
+      "image": "https://placehold.co/600x400/f1c40f/ffffff?text=Praktek+RPL",
+      "title": "Praktek Lab RPL",
+      "description": "Siswa jurusan RPL sedang mengerjakan proyek aplikasi."
+    },
+    {
+      "image": "https://placehold.co/600x400/e67e22/ffffff?text=Praktek+Kuliner",
+      "title": "Praktek Jurusan Kuliner",
+      "description": "Membuat hidangan spesial di dapur kuliner."
+    },
+    {
+      "image": "https://placehold.co/600x400/e74c3c/ffffff?text=Praktek+TKJ",
+      "title": "Praktek Jaringan TKJ",
+      "description": "Setting dan konfigurasi jaringan oleh siswa TKJ."
+    },
+    {
+      "image": "https://placehold.co/600x400/16a085/ffffff?text=Praktek+DKV",
+      "title": "Praktek Desain DKV",
+      "description": "Siswa DKV dalam sesi fotografi produk."
+    },
+    {
+      "image": "https://placehold.co/600x400/34495e/ffffff?text=Workshop+Auto",
+      "title": "Praktek Otomotif",
+      "description": "Perawatan mesin dan perbaikan ringan pada sepeda motor."
+    },
+    {
+      "image": "https://placehold.co/600x400/9b59b6/ffffff?text=Simulasi+Lab",
+      "title": "Simulasi Laboratorium",
+      "description": "Latihan keselamatan kerja dan SOP laboratorium."
+    },
+    {
+      "image": "https://placehold.co/600x400/2980b9/ffffff?text=Studio+Musik",
+      "title": "Praktek Audio & Musik",
+      "description": "Rekaman lagu karya siswa jurusan musik dan multimedia."
+    },
+    {
+      "image": "https://placehold.co/600x400/1abc9c/ffffff?text=Praktek+Pertanian",
+      "title": "Praktek Agribisnis",
+      "description": "Budidaya sayur organik di kebun sekolah."
+    },
+    {
+      "image": "https://placehold.co/600x400/2c3e50/ffffff?text=Pengolahan+Makanan",
+      "title": "Praktek Pengolahan Pangan",
+      "description": "Pembuatan produk olahan untuk pemasaran sekolah."
+    },
+    {
+      "image": "https://placehold.co/600x400/8e44ad/ffffff?text=Proyek+Kolaborasi",
+      "title": "Proyek Kolaborasi Industri",
+      "description": "Siswa bekerja sama dengan perusahaan lokal membuat prototipe."
+    },
+    {
+      "image": "https://placehold.co/600x400/f39c12/ffffff?text=Lab+Kimia",
+      "title": "Eksperimen Laboratorium",
+      "description": "Praktikum kimia dasar untuk meningkatkan keterampilan laboratorium."
+    },
+    {
+      "image": "https://placehold.co/600x400/c0392b/ffffff?text=Praktek+Fotografi",
+      "title": "Praktek Fotografi & Editing",
+      "description": "Sesi pemotretan produk dan editing untuk portofolio siswa DKV."
+    }
+  ],
+  "Kegiatan Lomba": [
+    {
+      "image": "https://placehold.co/600x400/2ecc71/ffffff?text=LKS+Tingkat+Provinsi",
+      "title": "Lomba Kompetensi Siswa",
+      "description": "Siswa berprestasi mewakili sekolah di LKS tingkat provinsi."
+    },
+    {
+      "image": "https://placehold.co/600x400/34495e/ffffff?text=Lomba+Debat",
+      "title": "Lomba Debat Bahasa Inggris",
+      "description": "Tim debat sekolah meraih juara dalam kompetisi."
+    },
+    {
+      "image": "https://placehold.co/600x400/7f8c8d/ffffff?text=Lomba+Robotik",
+      "title": "Kompetisi Robotik",
+      "description": "Tim robotik SMKN 1 Dlanggu dalam ajang kompetisi nasional."
+    },
+    {
+      "image": "https://placehold.co/600x400/8e44ad/ffffff?text=Juara+Futsal",
+      "title": "Juara Turnamen Futsal",
+      "description": "Tim Futsal sekolah mengangkat piala kemenangan."
+    },
+    {
+      "image": "https://placehold.co/600x400/16a085/ffffff?text=Lomba+Karya+Tulis",
+      "title": "Lomba Karya Tulis Ilmiah",
+      "description": "Siswa mempresentasikan riset kecil dalam lomba karya tulis."
+    },
+    {
+      "image": "https://placehold.co/600x400/3498db/ffffff?text=Lomba+Seni",
+      "title": "Festival Seni & Musik",
+      "description": "Kompetisi band sekolah dan pertunjukan solo."
+    },
+    {
+      "image": "https://placehold.co/600x400/f1c40f/ffffff?text=Olahraga+Antarsekolah",
+      "title": "Kejuaraan Atletik",
+      "description": "Cabang atletik mewakili sekolah di ajang antar sekolah."
+    },
+    {
+      "image": "https://placehold.co/600x400/9b59b6/ffffff?text=Hackathon",
+      "title": "Hackathon Sekolah",
+      "description": "Kompetisi pengembangan aplikasi selama 24 jam."
+    },
+    {
+      "image": "https://placehold.co/600x400/2c3e50/ffffff?text=Tryout+OSN",
+      "title": "Seleksi Olimpiade Sains",
+      "description": "Tryout dan seleksi untuk kontes sains regional."
+    },
+    {
+      "image": "https://placehold.co/600x400/c0392b/ffffff?text=Kompetisi+Fotografi",
+      "title": "Kompetisi Fotografi Siswa",
+      "description": "Juara lomba foto dokumenter tentang lingkungan sekolah."
+    },
+    {
+      "image": "https://placehold.co/600x400/27ae60/ffffff?text=Lomba+Startup",
+      "title": "Lomba Ide Bisnis",
+      "description": "Pitching ide bisnis kreatif hasil karya siswa."
+    },
+    {
+      "image": "https://placehold.co/600x400/2980b9/ffffff?text=Turnamen+E-Sport",
+      "title": "Turnamen E-Sport",
+      "description": "Kompetisi game antar kelas yang diikuti banyak siswa."
+    }
+  ]
+}

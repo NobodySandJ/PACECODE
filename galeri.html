@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<html lang="id">
-  <head>
+<html lang="id" class="scroll-smooth">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Program Keahlian - SMKN 1 Dlanggu</title>
-    <link rel="stylesheet" href="/style.css" />
-    <script type="module" src="/src/jurusan.js"></script>
-
+    <title>Galeri - SMKN 1 Dlanggu</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <script type="module" src="/src/galeri.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="font-['Poppins',_sans-serif] bg-gray-50 text-gray-800">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="font-['Poppins',_sans-serif] bg-gray-50 text-gray-800">
+
     <header class="bg-white shadow-sm sticky top-0 z-50">
   <nav class="container mx-auto px-4 py-2 flex justify-between items-center">
     <a href="/" class="flex items-center space-x-3">
@@ -104,104 +101,25 @@
 </header>
 
     <main>
-      <section class="bg-purple-600 text-white py-8">
-        <div class="container mx-auto px-4">
-          <h1 class="text-3xl font-bold">PROGRAM KEAHLIAN</h1>
-          <p id="breadcrumb" class="text-indigo-200 mt-1">
-            Home / Jurusan / Memuat...
-          </p>
-        </div>
-      </section>
-
-      <section id="content-jurusan" class="container mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <aside class="lg:col-span-1">
-            <div class="bg-white p-4 rounded-lg shadow-md sticky top-28">
-              <h3 class="text-lg font-bold mb-4 border-b pb-2">
-                Semua Jurusan
-              </h3>
-              <ul id="jurusan-list-sidebar" class="space-y-1">
-                <li>
-                  <a
-                    href="#"
-                    class="block px-3 py-2 rounded-md bg-gray-200 animate-pulse"
-                    >Memuat...</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block px-3 py-2 rounded-md bg-gray-200 animate-pulse"
-                    >Memuat...</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </aside>
-
-          <div class="lg:col-span-3 bg-white p-8 rounded-lg shadow-md">
-            <img
-              id="gambar-utama"
-              src="https://placehold.co/800x400/e2e8f0/374151?text=Memuat+Gambar..."
-              alt="Foto utama jurusan"
-              class="w-full h-auto object-cover rounded-lg mb-6"
-            />
-
-            <h2 id="nama-jurusan" class="text-3xl font-bold text-gray-800 mb-4">
-              Memuat Nama Jurusan...
-            </h2>
-
-            <div class="space-y-6">
-              <div>
-                <h3 class="text-xl font-semibold mb-2 text-purple-600">
-                  Deskripsi
-                </h3>
-                <p id="deskripsi-jurusan" class="text-gray-600 leading-relaxed">
-                  Memuat deskripsi lengkap tentang jurusan...
+        <section class="bg-purple-600 text-white py-8">
+            <div class="container mx-auto px-4">
+                <h1 class="text-3xl font-bold">Galeri Sekolah</h1>
+                <p class="text-indigo-200 mt-1">
+                    Momen dan Kegiatan di SMKN 1 Dlanggu
                 </p>
-              </div>
-              <div>
-                <h3 class="text-xl font-semibold mb-2 text-purple-600">
-                  Kompetensi Keahlian
-                </h3>
-                <ul
-                  id="keahlian-list"
-                  class="space-y-2 list-disc list-inside text-gray-600"
-                >
-                  <li>Memuat keahlian...</li>
-                </ul>
-              </div>
             </div>
-            <section id="guru-section" class="mt-10 pt-6 border-t">
-              <h3 class="text-2xl font-bold mb-6 text-gray-800">
-                Tenaga Pendidik
-              </h3>
-              <div
-                id="guru-grid"
-                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 text-center"
-              ></div>
-            </section>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section
-        id="content-error"
-        class="container mx-auto px-4 py-12 text-center hidden"
-      >
-        <h1 class="text-4xl font-bold text-red-600">Jurusan Tidak Ditemukan</h1>
-        <p class="text-gray-600 mt-4">
-          Maaf, program keahlian yang Anda cari tidak ada.
-        </p>
-        <a
-          href="/"
-          class="mt-6 inline-block bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-600"
-          >Kembali ke Beranda</a
-        >
-      </section>
+        <section class="container mx-auto px-4 py-12">
+            <div id="gallery-filters" class="flex justify-center flex-wrap gap-2 sm:gap-4 mb-10">
+                </div>
+            
+            <div id="gallery-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                </div>
+        </section>
     </main>
 
-    <footer class="bg-gray-900 text-white">
+    <footer class="bg-gray-900 text-white mt-12">
         <div class="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="md:col-span-2">
                 <h3 class="text-2xl font-bold mb-2">SMKN 1 Dlanggu</h3>
@@ -212,7 +130,8 @@
                 <ul class="space-y-2 text-gray-400">
                     <li><a href="profil.html" class="hover:text-white">Profil</a></li>
                     <li><a href="jurusan.html" class="hover:text-white">Jurusan</a></li>
-                    <li><a href="#" class="hover:text-white">Berita</a></li>
+                    <li><a href="galeri.html" class="hover:text-white">Galeri</a></li>
+                    <li><a href="berita.html" class="hover:text-white">Berita</a></li>
                     <li><a href="portofolio.html" class="hover:text-white">Portfolio</a></li>
                 </ul>
             </div>
@@ -234,6 +153,5 @@
         </div>
     </footer>
 
-    <script type="module" src="/src/animation.js"></script>
-    </body>
+</body>
 </html>
