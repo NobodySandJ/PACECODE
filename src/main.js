@@ -18,17 +18,19 @@ sr.reveal('.seksikepsek', {
 
 document.addEventListener('DOMContentLoaded', () => {
     // ===================================
-    // LOGIKA BARU: MENU HAMBURGER MOBILE
+    // LOGIKA MENU HAMBURGER MOBILE
     // ===================================
     const hamburgerButton = document.getElementById('hamburger-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    hamburgerButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
+    if (hamburgerButton && mobileMenu) {
+        hamburgerButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
 
     // ===================================
-    // LOGIKA LAMA: NAVBAR DROPDOWN DESKTOP
+    // LOGIKA DROPDOWN NAVBAR DESKTOP
     // ===================================
     const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
     const closeAllDropdowns = () => {
@@ -42,12 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-
             const targetPanel = link.nextElementSibling;
             const isTargetPanelOpen = !targetPanel.classList.contains('invisible');
-
             closeAllDropdowns();
-
             if (!isTargetPanelOpen && targetPanel) {
                 targetPanel.classList.remove('invisible', 'opacity-0', '-translate-y-2');
                 targetPanel.classList.add('visible', 'opacity-100', 'translate-y-0');
@@ -58,54 +57,77 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', () => {
         closeAllDropdowns();
     });
+
     // ===================================
-  // LOGIKA TAMPILAN PORTOFOLIO DI INDEX
-  // ===================================
-  const portfolioContainerIndex = document.getElementById(
-    "portfolio-container-index"
-  );
-  const jurusanFiltersIndex = document.getElementById("jurusan-filters-index");
+    // LOGIKA NAVIGASI AKTIF (DINAMIS)
+    // ===================================
+    const setActiveLink = () => {
+        const currentPath = window.location.pathname;
 
-  if (portfolioContainerIndex && jurusanFiltersIndex) {
-    let portfolioData = {};
-    let jurusanSaatIni = "";
+        // --- Menangani menu desktop ---
+        const desktopLinks = document.querySelectorAll('header > nav .nav-link');
+        desktopLinks.forEach(link => {
+            const linkPath = new URL(link.href).pathname;
+            link.classList.remove('active-nav');
+            if (linkPath === currentPath) {
+                link.classList.add('active-nav');
+            }
+        });
 
-    async function loadPortfolioData() {
-      try {
-        const response = await fetch("/data/portofolio.json");
-        if (!response.ok) {
-           throw new Error(`HTTP error! status: ${response.status}`);
+        // --- Menangani menu mobile ---
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => {
+            const linkPath = new URL(link.href).pathname;
+            link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50');
+            if (linkPath === currentPath) {
+                link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
+            }
+        });
+    };
+
+    setActiveLink();
+
+    // ===================================
+    // LOGIKA TAMPILAN PORTOFOLIO DI INDEX
+    // ===================================
+    const portfolioContainerIndex = document.getElementById("portfolio-container-index");
+    const jurusanFiltersIndex = document.getElementById("jurusan-filters-index");
+
+    if (portfolioContainerIndex && jurusanFiltersIndex) {
+        let portfolioData = {};
+        let jurusanSaatIni = "";
+
+        async function loadPortfolioData() {
+            try {
+                const response = await fetch("/data/portofolio.json");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                portfolioData = await response.json();
+                jurusanSaatIni = Object.keys(portfolioData)[0];
+                setupJurusanFilters();
+                renderPortfolio(jurusanSaatIni);
+            } catch (error) {
+                console.error("Gagal memuat data portofolio:", error);
+                portfolioContainerIndex.innerHTML = `<p class="text-center text-red-500 col-span-full">Gagal memuat data portofolio.</p>`;
+            }
         }
-        portfolioData = await response.json();
-        jurusanSaatIni = Object.keys(portfolioData)[0]; // Tampilkan jurusan pertama sebagai default
-        setupJurusanFilters();
-        renderPortfolio(jurusanSaatIni);
-      } catch (error) {
-        console.error("Gagal memuat data portofolio:", error);
-        portfolioContainerIndex.innerHTML = `<p class="text-center text-red-500 col-span-full">Gagal memuat data portofolio. Pastikan file JSON ada dan dapat diakses.</p>`;
-      }
-    }
 
-    function renderPortfolio(jurusan) {
-      portfolioContainerIndex.innerHTML = "";
-      const dataJurusan = portfolioData[jurusan];
-      if (!dataJurusan) return;
+        function renderPortfolio(jurusan) {
+            portfolioContainerIndex.innerHTML = "";
+            const dataJurusan = portfolioData[jurusan];
+            if (!dataJurusan) return;
+            const slicedData = dataJurusan.slice(0, 4);
+            slicedData.forEach((item) => {
+                const card = createPortfolioCard(item);
+                portfolioContainerIndex.appendChild(card);
+            });
+        }
 
-      // Ambil 4 item pertama dari data
-      const slicedData = dataJurusan.slice(0, 4);
-
-      slicedData.forEach((item) => {
-        const card = createPortfolioCard(item);
-        portfolioContainerIndex.appendChild(card);
-      });
-    }
-
-    function createPortfolioCard(data) {
-      const card = document.createElement("div");
-      card.className =
-        "bg-white rounded-lg shadow-md overflow-hidden group transform transition-all duration-300 hover:-translate-y-2";
-
-      card.innerHTML = `
+        function createPortfolioCard(data) {
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-lg shadow-md overflow-hidden group transform transition-all duration-300 hover:-translate-y-2";
+            card.innerHTML = `
               <div class="relative">
                   <img src="${data.fotoProject}" alt="${data.namaProject}" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
               </div>
@@ -115,43 +137,41 @@ document.addEventListener('DOMContentLoaded', () => {
                   <a href="portofolio.html" class="text-sm font-semibold text-purple-600 hover:text-purple-800">Lihat Detail →</a>
               </div>
             `;
-      return card;
-    }
-
-    function setupJurusanFilters() {
-      jurusanFiltersIndex.innerHTML = "";
-      const jurusanKeys = Object.keys(portfolioData);
-      jurusanKeys.forEach((jurusan) => {
-        const button = document.createElement("button");
-        button.textContent = jurusan;
-        button.className =
-          "px-4 py-2 text-sm font-medium rounded-full transition";
-        if (jurusan === jurusanSaatIni) {
-          button.classList.add("bg-purple-600", "text-white");
-        } else {
-          button.classList.add("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
+            return card;
         }
 
-        button.addEventListener("click", () => {
-          jurusanSaatIni = jurusan;
-          renderPortfolio(jurusan);
-          updateFilterButtons();
-        });
-        jurusanFiltersIndex.appendChild(button);
-      });
-    }
-
-    function updateFilterButtons() {
-      Array.from(jurusanFiltersIndex.children).forEach((button) => {
-        button.classList.remove("bg-purple-600", "text-white");
-        button.classList.add("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
-        if (button.textContent === jurusanSaatIni) {
-          button.classList.add("bg-purple-600", "text-white");
-          button.classList.remove("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
+        function setupJurusanFilters() {
+            jurusanFiltersIndex.innerHTML = "";
+            const jurusanKeys = Object.keys(portfolioData);
+            jurusanKeys.forEach((jurusan) => {
+                const button = document.createElement("button");
+                button.textContent = jurusan;
+                button.className = "px-4 py-2 text-sm font-medium rounded-full transition";
+                if (jurusan === jurusanSaatIni) {
+                    button.classList.add("bg-purple-600", "text-white");
+                } else {
+                    button.classList.add("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
+                }
+                button.addEventListener("click", () => {
+                    jurusanSaatIni = jurusan;
+                    renderPortfolio(jurusan);
+                    updateFilterButtons();
+                });
+                jurusanFiltersIndex.appendChild(button);
+            });
         }
-      });
-    }
 
-    loadPortfolioData();
-  }
+        function updateFilterButtons() {
+            Array.from(jurusanFiltersIndex.children).forEach((button) => {
+                button.classList.remove("bg-purple-600", "text-white");
+                button.classList.add("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
+                if (button.textContent === jurusanSaatIni) {
+                    button.classList.add("bg-purple-600", "text-white");
+                    button.classList.remove("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
+                }
+            });
+        }
+
+        loadPortfolioData();
+    }
 });
