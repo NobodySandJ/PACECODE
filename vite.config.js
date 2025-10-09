@@ -1,12 +1,12 @@
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import { resolve } from 'path'; // Baris ini mengimpor fungsi 'resolve'
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
-  build: { // Konfigurasi ini ditambahkan untuk mendaftarkan semua halaman HTML
+  build: {
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
@@ -16,6 +16,7 @@ export default defineConfig({
         berita: resolve(__dirname, 'berita.html'),
         fasilitas: resolve(__dirname, 'fasilitas.html'),
         guru: resolve(__dirname, 'guru.html'),
+        galeri: resolve(__dirname, 'galeri.html'), // Tambahkan baris ini
       },
     },
   },
