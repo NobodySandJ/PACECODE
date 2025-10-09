@@ -15,6 +15,7 @@ export default defineConfig({
         portofolio: resolve(__dirname, 'portofolio.html'),
         berita: resolve(__dirname, 'berita.html'),
         fasilitas: resolve(__dirname, 'fasilitas.html'),
+        guru: resolve(__dirname, 'guru.html'),
       },
     },
   },
