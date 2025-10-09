@@ -3,33 +3,28 @@
 import './style.css';
 import ScrollReveal from 'scrollreveal';
 
-// Fungsi untuk membersihkan dan menormalkan path URL
-const cleanPath = (path) => {
-  // Hapus 'index.html' dari akhir path
-  if (path.endsWith('index.html')) {
-    return path.substring(0, path.length - 'index.html'.length);
-  }
-  // Hapus slash di akhir jika ada (selain untuk root path '/')
-  if (path.length > 1 && path.endsWith('/')) {
-    return path.slice(0, -1);
-  }
-  return path;
-};
-
 // Fungsi untuk menandai link navigasi yang aktif
 const setActiveLink = () => {
+    const cleanPath = (path) => {
+        if (path.endsWith('index.html')) {
+            return path.substring(0, path.length - 'index.html'.length);
+        }
+        if (path.length > 1 && path.endsWith('/')) {
+            return path.slice(0, -1);
+        }
+        return path;
+    };
+
     const currentPath = cleanPath(window.location.pathname);
 
     // --- Menu Desktop ---
     const desktopLinks = document.querySelectorAll('header > nav .nav-link');
     desktopLinks.forEach(link => {
-        const linkPath = cleanPath(new URL(link.href).pathname);
-        
-        // Hapus kelas aktif dari semua link terlebih dahulu
         link.classList.remove('active-nav');
-        
-        // Tambahkan kelas aktif jika path-nya cocok
-        if (linkPath === currentPath) {
+        const linkPath = cleanPath(new URL(link.href).pathname);
+
+        // Menambahkan kondisi untuk halaman fasilitas
+        if (linkPath === currentPath || (currentPath === '/fasilitas.html' && linkPath === '/profil.html')) {
             link.classList.add('active-nav');
         }
     });
@@ -37,16 +32,22 @@ const setActiveLink = () => {
     // --- Menu Mobile ---
     const mobileLinks = document.querySelectorAll('#mobile-menu a');
     mobileLinks.forEach(link => {
-        const linkPath = cleanPath(new URL(link.href).pathname);
-        
         link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50');
+        const linkPath = cleanPath(new URL(link.href).pathname);
+        const hasHash = new URL(link.href).hash !== '';
+
+        // Hanya tandai link utama (yang tidak punya hash) atau
+        // link lain yang path-nya cocok
+        if (linkPath === currentPath && !hasHash) {
+            link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
+        }
         
-        if (linkPath === currentPath) {
+        // Kondisi khusus untuk halaman fasilitas, tandai "Profil" sebagai aktif
+        if (currentPath === '/fasilitas.html' && linkPath === '/profil.html' && !hasHash) {
             link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
         }
     });
 };
-
 
 // Inisialisasi ScrollReveal
 const sr = ScrollReveal({
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Logika Dropdown
+    // 2. Logika Dropdown Desktop
     const closeAllDropdowns = () => {
         document.querySelectorAll('.dropdown-panel').forEach(panel => {
             panel.classList.remove('visible', 'opacity-100', 'translate-y-0');
@@ -105,6 +106,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Panggil fungsi untuk menandai navigasi aktif
     setActiveLink();
     
+    // ===================================
+    // LOGIKA DROPDOWN MOBILE
+    // ===================================
+    const dropdownLinksMobile = document.querySelectorAll('.nav-link-dropdown-mobile');
+
+    dropdownLinksMobile.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const targetPanel = link.nextElementSibling;
+            if (targetPanel) {
+                targetPanel.classList.toggle('hidden');
+            }
+        });
+    });
+
     // ===================================
     // LOGIKA TAMPILAN PORTOFOLIO DI INDEX (Halaman Utama)
     // ===================================
