@@ -1,11 +1,17 @@
+// Impor 'sr' dari animation.js agar bisa digunakan di sini
+import { sr } from './animation.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const jurusanNav = document.getElementById('jurusan-filters');
     const sudahBekerjaContainer = document.getElementById('sudah-bekerja-container');
     const belumBekerjaContainer = document.getElementById('belum-bekerja-container');
 
-    // Modal elements
+    // Modal elements (Pastikan ID ini ada di portofolio.html Anda)
     const modal = document.getElementById('modal');
+    // Perhatikan: portofolio.html tidak memiliki elemen-elemen modal ini, 
+    // jadi saya akan menambahkan pengecekan agar tidak error.
+    // Jika Anda ingin modal berfungsi, Anda perlu menambahkan HTML-nya.
     const closeModalBtn = document.getElementById('close-modal');
     const modalJudul = document.getElementById('modal-judul');
     const modalFoto = document.getElementById('modal-foto');
@@ -17,52 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Skema Warna untuk Setiap Jurusan
     const jurusanColors = {
-        "Rekayasa Perangkat Lunak": {
-            border: "border-blue-500",
-            button: "bg-blue-600 hover:bg-blue-700",
-            tag: "text-blue-600"
-        },
-        "Teknik Komputer dan Jaringan": {
-            border: "border-red-500",
-            button: "bg-red-600 hover:bg-red-700",
-            tag: "text-red-600"
-        },
-        "Desain Komunikasi Visual": {
-            border: "border-green-500",
-            button: "bg-green-600 hover:bg-green-700",
-            tag: "text-green-600"
-        },
-        "Animasi": {
-            border: "border-gray-700",
-            button: "bg-gray-800 hover:bg-gray-900",
-            tag: "text-gray-700"
-        },
-        "Kuliner": {
-            border: "border-orange-500",
-            button: "bg-orange-500 hover:bg-orange-600",
-            tag: "text-orange-500"
-        },
-        "Perhotelan": {
-            border: "border-yellow-500",
-            button: "bg-yellow-500 hover:bg-yellow-600",
-            tag: "text-yellow-500"
-        }
+        "Rekayasa Perangkat Lunak": { border: "border-blue-500", button: "bg-blue-600 hover:bg-blue-700", tag: "text-blue-600" },
+        "Teknik Komputer dan Jaringan": { border: "border-red-500", button: "bg-red-600 hover:bg-red-700", tag: "text-red-600" },
+        "Desain Komunikasi Visual": { border: "border-green-500", button: "bg-green-600 hover:bg-green-700", tag: "text-green-600" },
+        "Animasi": { border: "border-gray-700", button: "bg-gray-800 hover:bg-gray-900", tag: "text-gray-700" },
+        "Kuliner": { border: "border-orange-500", button: "bg-orange-500 hover:bg-orange-600", tag: "text-orange-500" },
+        "Perhotelan": { border: "border-yellow-500", button: "bg-yellow-500 hover:bg-yellow-600", tag: "text-yellow-500" }
     };
     
-    // Default color jika jurusan tidak ditemukan
-    const defaultColors = {
-        border: "border-indigo-500",
-        button: "bg-indigo-600 hover:bg-indigo-700",
-        tag: "text-indigo-600"
-    };
-
+    const defaultColors = { border: "border-indigo-500", button: "bg-indigo-600 hover:bg-indigo-700", tag: "text-indigo-600" };
 
     async function loadPortfolioData() {
         try {
             const response = await fetch('/data/portofolio.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             portfolioData = await response.json();
             jurusanSaatIni = Object.keys(portfolioData)[0];
 
@@ -74,12 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fungsi createPortfolioCard diperbarui untuk menerima 'jurusan'
     const createPortfolioCard = (data, jurusan) => {
         const colors = jurusanColors[jurusan] || defaultColors;
-
         const card = document.createElement('div');
-        // Menambahkan kelas border dari skema warna
         card.className = `bg-white rounded-lg shadow-lg overflow-hidden group transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-t-4 ${colors.border}`;
 
         const bekerjaBadge = data.bekerja
@@ -107,8 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.querySelector('.view-detail-btn').addEventListener('click', () => openModal(data));
         return card;
     };
-
-    // Fungsi renderPortfolio diperbarui untuk mengirim 'jurusan' ke createPortfolioCard
+    
     const renderPortfolio = (jurusan) => {
         sudahBekerjaContainer.innerHTML = '';
         belumBekerjaContainer.innerHTML = '';
@@ -117,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!dataJurusan) return;
 
         dataJurusan.forEach(item => {
-            // Mengirim nama jurusan saat membuat kartu
             const card = createPortfolioCard(item, jurusan);
             if (item.bekerja) {
                 sudahBekerjaContainer.appendChild(card);
@@ -125,6 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 belumBekerjaContainer.appendChild(card);
             }
         });
+        
+        // TAMBAHKAN INI: Re-apply animasi ke elemen baru setelah filter
+        sr.reveal('#sudah-bekerja-container > div', { delay: 200, origin: 'bottom', interval: 100, cleanup: true });
+        sr.reveal('#belum-bekerja-container > div', { delay: 200, origin: 'bottom', interval: 100, cleanup: true });
     };
 
     const setupJurusanNavigation = () => {
@@ -161,8 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Fungsi modal tetap sama
     const openModal = (data) => {
+        if (!modal || !modalJudul || !modalFoto || !modalDeskripsi || !modalLink) return;
         modalJudul.textContent = data.namaProject;
         modalFoto.src = data.fotoProject;
         modalDeskripsi.textContent = data.deskripsiLengkap;
@@ -172,11 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const closeModal = () => {
+        if (!modal) return;
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     };
 
-    // PERBAIKAN: Tambahkan pengecekan sebelum menambahkan event listener
     if (closeModalBtn) {
         closeModalBtn.addEventListener('click', closeModal);
     }

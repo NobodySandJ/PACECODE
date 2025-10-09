@@ -1,7 +1,8 @@
 // src/main.js
 
 import './style.css';
-import ScrollReveal from 'scrollreveal';
+// Impor FUNGSI inisialisasi dari animation.js, bukan library-nya langsung
+import { initScrollReveal } from './animation.js';
 
 // Fungsi untuk menandai link navigasi yang aktif
 const setActiveLink = () => {
@@ -45,45 +46,7 @@ const setActiveLink = () => {
     });
 };
 
-// ===================================
-// INISIALISASI SCROLL REVEAL
-// ===================================
-const sr = ScrollReveal({
-    distance: '60px',
-    duration: 2500, // Durasi animasi lebih lama untuk efek lebih halus
-    delay: 400,
-    reset: true, // Animasi akan berulang setiap kali elemen masuk viewport
-});
-
-// Animasi untuk halaman index.html
-if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
-    // Hero Section
-    sr.reveal('section h1', { delay: 500, origin: 'top' });
-    sr.reveal('section .text-lg', { delay: 600, origin: 'bottom' });
-    sr.reveal('section .btn-animated', { delay: 700, origin: 'bottom' });
-
-    // Sambutan Kepala Sekolah
-    sr.reveal('.seksikepsek .relative', { delay: 500, origin: 'left' });
-    sr.reveal('.seksikepsek div:not(.relative)', { delay: 600, origin: 'right' });
-
-    // Visi & Misi
-    sr.reveal('.bg-gray-50 .grid > div:nth-child(1)', { delay: 500, origin: 'left' });
-    sr.reveal('.bg-gray-50 .grid > div:nth-child(2)', { delay: 600, origin: 'right' });
-    
-    // Kegiatan Terbaru
-    sr.reveal('.bg-white .text-center h2', { delay: 200, origin: 'top' });
-    sr.reveal('.bg-white .grid.md\\:grid-cols-3 .group', { delay: 300, origin: 'bottom', interval: 200 });
-    
-    // Portofolio
-    sr.reveal('section.bg-gray-50:nth-of-type(2) h2', { delay: 200, origin: 'top' });
-    sr.reveal('#jurusan-filters-index button', { delay: 300, origin: 'bottom', interval: 100 });
-    sr.reveal('#portfolio-container-index > div', { delay: 500, origin: 'bottom', interval: 200 });
-    
-    // FAQ
-    sr.reveal('.bg-white section:last-of-type img', { delay: 500, origin: 'left' });
-    sr.reveal('.bg-white section:last-of-type details', { delay: 600, origin: 'right', interval: 200 });
-}
-
+// Hapus semua inisialisasi ScrollReveal dari file ini untuk menghindari konflik
 
 document.addEventListener('DOMContentLoaded', () => {
     const hamburgerButton = document.getElementById('hamburger-button');
@@ -164,8 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const card = createPortfolioCard(item);
                 portfolioContainerIndex.appendChild(card);
             });
-            // Re-apply reveal ke elemen baru
-            sr.reveal('#portfolio-container-index > div', { delay: 200, origin: 'bottom', interval: 100, cleanup: true });
+            // Tidak perlu re-apply sr.reveal di sini karena akan di-handle oleh initScrollReveal
         }
 
         function createPortfolioCard(data) {
@@ -218,4 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadPortfolioData();
     }
+    
+    // Panggil fungsi inisialisasi animasi SATU KALI di akhir setelah DOM siap
+    initScrollReveal();
 });
