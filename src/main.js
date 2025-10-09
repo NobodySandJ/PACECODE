@@ -1,5 +1,52 @@
-import './style.css'
+// src/main.js
+
+import './style.css';
 import ScrollReveal from 'scrollreveal';
+
+// Fungsi untuk membersihkan dan menormalkan path URL
+const cleanPath = (path) => {
+  // Hapus 'index.html' dari akhir path
+  if (path.endsWith('index.html')) {
+    return path.substring(0, path.length - 'index.html'.length);
+  }
+  // Hapus slash di akhir jika ada (selain untuk root path '/')
+  if (path.length > 1 && path.endsWith('/')) {
+    return path.slice(0, -1);
+  }
+  return path;
+};
+
+// Fungsi untuk menandai link navigasi yang aktif
+const setActiveLink = () => {
+    const currentPath = cleanPath(window.location.pathname);
+
+    // --- Menu Desktop ---
+    const desktopLinks = document.querySelectorAll('header > nav .nav-link');
+    desktopLinks.forEach(link => {
+        const linkPath = cleanPath(new URL(link.href).pathname);
+        
+        // Hapus kelas aktif dari semua link terlebih dahulu
+        link.classList.remove('active-nav');
+        
+        // Tambahkan kelas aktif jika path-nya cocok
+        if (linkPath === currentPath) {
+            link.classList.add('active-nav');
+        }
+    });
+
+    // --- Menu Mobile ---
+    const mobileLinks = document.querySelectorAll('#mobile-menu a');
+    mobileLinks.forEach(link => {
+        const linkPath = cleanPath(new URL(link.href).pathname);
+        
+        link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50');
+        
+        if (linkPath === currentPath) {
+            link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
+        }
+    });
+};
+
 
 // Inisialisasi ScrollReveal
 const sr = ScrollReveal({
@@ -18,21 +65,20 @@ sr.reveal('.seksikepsek', {
 
 document.addEventListener('DOMContentLoaded', () => {
     // ===================================
-    // LOGIKA MENU HAMBURGER MOBILE
+    // LOGIKA UMUM (dijalankan di semua halaman)
     // ===================================
     const hamburgerButton = document.getElementById('hamburger-button');
     const mobileMenu = document.getElementById('mobile-menu');
+    const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
 
+    // 1. Logika Hamburger
     if (hamburgerButton && mobileMenu) {
         hamburgerButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
     }
 
-    // ===================================
-    // LOGIKA DROPDOWN NAVBAR DESKTOP
-    // ===================================
-    const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
+    // 2. Logika Dropdown
     const closeAllDropdowns = () => {
         document.querySelectorAll('.dropdown-panel').forEach(panel => {
             panel.classList.remove('visible', 'opacity-100', 'translate-y-0');
@@ -54,41 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.addEventListener('click', () => {
-        closeAllDropdowns();
-    });
-
-    // ===================================
-    // LOGIKA NAVIGASI AKTIF (DINAMIS)
-    // ===================================
-    const setActiveLink = () => {
-        const currentPath = window.location.pathname;
-
-        // --- Menangani menu desktop ---
-        const desktopLinks = document.querySelectorAll('header > nav .nav-link');
-        desktopLinks.forEach(link => {
-            const linkPath = new URL(link.href).pathname;
-            link.classList.remove('active-nav');
-            if (linkPath === currentPath) {
-                link.classList.add('active-nav');
-            }
-        });
-
-        // --- Menangani menu mobile ---
-        const mobileLinks = document.querySelectorAll('#mobile-menu a');
-        mobileLinks.forEach(link => {
-            const linkPath = new URL(link.href).pathname;
-            link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50');
-            if (linkPath === currentPath) {
-                link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
-            }
-        });
-    };
-
+    document.addEventListener('click', () => closeAllDropdowns());
+    
+    // 3. Panggil fungsi untuk menandai navigasi aktif
     setActiveLink();
-
+    
     // ===================================
-    // LOGIKA TAMPILAN PORTOFOLIO DI INDEX
+    // LOGIKA TAMPILAN PORTOFOLIO DI INDEX (Halaman Utama)
     // ===================================
     const portfolioContainerIndex = document.getElementById("portfolio-container-index");
     const jurusanFiltersIndex = document.getElementById("jurusan-filters-index");
@@ -100,9 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         async function loadPortfolioData() {
             try {
                 const response = await fetch("/data/portofolio.json");
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 portfolioData = await response.json();
                 jurusanSaatIni = Object.keys(portfolioData)[0];
                 setupJurusanFilters();
