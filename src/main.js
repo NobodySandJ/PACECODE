@@ -17,36 +17,24 @@ const setActiveLink = () => {
     };
 
     const currentPath = cleanPath(window.location.pathname);
-    // Array halaman yang berada di bawah "Profil"
     const profileSubPages = ['/fasilitas.html', '/guru.html', '/galeri.html'];
 
-    // --- Menu Desktop ---
     const desktopLinks = document.querySelectorAll('header > nav .nav-link');
     desktopLinks.forEach(link => {
         link.classList.remove('active-nav');
         const linkPath = cleanPath(new URL(link.href).pathname);
-
-        // Logika yang diperbarui:
-        // Aktifkan link jika path-nya cocok,
-        // ATAU jika kita sedang berada di salah satu sub-halaman profil DAN link ini adalah link "Profil"
         if (linkPath === currentPath || (profileSubPages.includes(currentPath) && linkPath === '/profil.html')) {
             link.classList.add('active-nav');
         }
     });
 
-    // --- Menu Mobile ---
     const mobileLinks = document.querySelectorAll('#mobile-menu a');
     mobileLinks.forEach(link => {
         link.classList.remove('text-indigo-600', 'font-bold', 'bg-indigo-50');
         const linkPath = cleanPath(new URL(link.href).pathname);
         const hasHash = new URL(link.href).hash !== '';
 
-        if (linkPath === currentPath && !hasHash) {
-            link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
-        }
-        
-        // Logika yang diperbarui untuk mobile
-        if (profileSubPages.includes(currentPath) && linkPath === '/profil.html' && !hasHash) {
+        if ((linkPath === currentPath && !hasHash) || (profileSubPages.includes(currentPath) && linkPath === '/profil.html' && !hasHash)) {
             link.classList.add('text-indigo-600', 'font-bold', 'bg-indigo-50');
         }
     });
@@ -56,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburgerButton = document.getElementById('hamburger-button');
     const mobileMenu = document.getElementById('mobile-menu');
     const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
+    const dropdownLinksMobile = document.querySelectorAll('.nav-link-dropdown-mobile');
 
     if (hamburgerButton && mobileMenu) {
         hamburgerButton.addEventListener('click', () => {
@@ -83,13 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    document.addEventListener('click', () => closeAllDropdowns());
     
-    setActiveLink();
-    
-    const dropdownLinksMobile = document.querySelectorAll('.nav-link-dropdown-mobile');
-
     dropdownLinksMobile.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -101,6 +84,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.addEventListener('click', () => closeAllDropdowns());
+    
+    setActiveLink();
+
+    // --- LOGIKA UNTUK HEADLINE BERITA ---
+    const headlineSection = document.getElementById('headline-berita');
+    const headlineContainer = document.getElementById('headline-container');
+    const headlineEnabled = localStorage.getItem('headlineEnabled') !== 'false';
+
+    async function loadHeadlineBerita() {
+        if (!headlineEnabled) {
+            if (headlineSection) headlineSection.style.display = 'none';
+            return;
+        }
+        try {
+            const response = await fetch('/data/berita.json');
+            if (!response.ok) throw new Error('Data berita tidak ditemukan');
+            const beritaData = await response.json();
+            
+            if (headlineContainer) {
+                headlineContainer.innerHTML = '';
+                beritaData.slice(0, 3).forEach(berita => {
+                    const beritaCard = document.createElement('div');
+                    beritaCard.className = 'bg-gray-50 rounded-lg overflow-hidden group';
+                    beritaCard.innerHTML = `
+                        <img src="${berita.gambar}" alt="${berita.judul}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">${berita.judul}</h3>
+                            <p class="text-gray-600 leading-relaxed">${berita.ringkasan}</p>
+                        </div>
+                    `;
+                    headlineContainer.appendChild(beritaCard);
+                });
+            }
+        } catch (error) {
+            console.error('Gagal memuat berita headline:', error);
+            if (headlineSection) headlineSection.style.display = 'none';
+        }
+    }
+    
+    if (headlineSection) {
+        loadHeadlineBerita();
+    }
+
+    // --- LOGIKA UNTUK PORTOFOLIO DI INDEX ---
     const portfolioContainerIndex = document.getElementById("portfolio-container-index");
     const jurusanFiltersIndex = document.getElementById("jurusan-filters-index");
 
@@ -108,32 +136,17 @@ document.addEventListener('DOMContentLoaded', () => {
         let portfolioData = {};
         let jurusanSaatIni = "";
 
-        async function loadPortfolioData() {
-            try {
-                const response = await fetch("/data/portofolio.json");
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                portfolioData = await response.json();
-                jurusanSaatIni = Object.keys(portfolioData)[0];
-                setupJurusanFilters();
-                renderPortfolio(jurusanSaatIni);
-            } catch (error) {
-                console.error("Gagal memuat data portofolio:", error);
-                portfolioContainerIndex.innerHTML = `<p class="text-center text-red-500 col-span-full">Gagal memuat data portofolio.</p>`;
-            }
-        }
-
-        function renderPortfolio(jurusan) {
+        const renderPortfolioIndex = (jurusan) => {
             portfolioContainerIndex.innerHTML = "";
-            const dataJurusan = portfolioData[jurusan];
-            if (!dataJurusan) return;
+            const dataJurusan = portfolioData[jurusan] || [];
             const slicedData = dataJurusan.slice(0, 4);
             slicedData.forEach((item) => {
-                const card = createPortfolioCard(item);
+                const card = createPortfolioCardIndex(item);
                 portfolioContainerIndex.appendChild(card);
             });
-        }
+        };
 
-        function createPortfolioCard(data) {
+        const createPortfolioCardIndex = (data) => {
             const card = document.createElement("div");
             card.className = "bg-white rounded-lg shadow-md overflow-hidden group transform transition-all duration-300 hover:-translate-y-2";
             card.innerHTML = `
@@ -147,30 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             `;
             return card;
-        }
+        };
 
-        function setupJurusanFilters() {
-            jurusanFiltersIndex.innerHTML = "";
-            const jurusanKeys = Object.keys(portfolioData);
-            jurusanKeys.forEach((jurusan) => {
-                const button = document.createElement("button");
-                button.textContent = jurusan;
-                button.className = "px-4 py-2 text-sm font-medium rounded-full transition";
-                if (jurusan === jurusanSaatIni) {
-                    button.classList.add("bg-purple-600", "text-white");
-                } else {
-                    button.classList.add("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
-                }
-                button.addEventListener("click", () => {
-                    jurusanSaatIni = jurusan;
-                    renderPortfolio(jurusan);
-                    updateFilterButtons();
-                });
-                jurusanFiltersIndex.appendChild(button);
-            });
-        }
-
-        function updateFilterButtons() {
+        const updateFilterButtonsIndex = () => {
             Array.from(jurusanFiltersIndex.children).forEach((button) => {
                 button.classList.remove("bg-purple-600", "text-white");
                 button.classList.add("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
@@ -179,10 +171,42 @@ document.addEventListener('DOMContentLoaded', () => {
                     button.classList.remove("bg-gray-200", "text-gray-700", "hover:bg-gray-300");
                 }
             });
-        }
+        };
+        
+        const setupJurusanFiltersIndex = () => {
+            jurusanFiltersIndex.innerHTML = "";
+            const jurusanKeys = Object.keys(portfolioData);
+            jurusanKeys.forEach((jurusan) => {
+                const button = document.createElement("button");
+                button.textContent = jurusan;
+                button.className = "px-4 py-2 text-sm font-medium rounded-full transition";
+                button.addEventListener("click", () => {
+                    jurusanSaatIni = jurusan;
+                    renderPortfolioIndex(jurusan);
+                    updateFilterButtonsIndex();
+                });
+                jurusanFiltersIndex.appendChild(button);
+            });
+             updateFilterButtonsIndex();
+        };
 
-        loadPortfolioData();
+        const loadPortfolioDataIndex = async () => {
+            try {
+                const response = await fetch("/data/portofolio.json");
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                portfolioData = await response.json();
+                jurusanSaatIni = Object.keys(portfolioData)[0];
+                setupJurusanFiltersIndex();
+                renderPortfolioIndex(jurusanSaatIni);
+            } catch (error) {
+                console.error("Gagal memuat data portofolio:", error);
+                portfolioContainerIndex.innerHTML = `<p class="text-center text-red-500 col-span-full">Gagal memuat data portofolio.</p>`;
+            }
+        };
+
+        loadPortfolioDataIndex();
     }
     
+    // Inisialisasi animasi setelah semua konten dinamis dimuat
     initScrollReveal();
 });

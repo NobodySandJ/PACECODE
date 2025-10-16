@@ -17,6 +17,7 @@ export default defineConfig({
         fasilitas: resolve(__dirname, 'fasilitas.html'),
         guru: resolve(__dirname, 'guru.html'),
         galeri: resolve(__dirname, 'galeri.html'), // Tambahkan baris ini
+        admin: resolve(__dirname, 'admin.html'),
       },
     },
   },

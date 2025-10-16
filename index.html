@@ -21,7 +21,7 @@
   <nav class="container mx-auto px-4 py-2 flex justify-between items-center">
     <a href="/" class="flex items-center space-x-3">
       <img src="/assets/logo.png" alt="Logo Sekolah" class="h-12" />
-      <span class="text-xl font-bold text-gray-800">SMKN 1 Dlanggu</span>
+      <span class="text-xl font-bold nav-link nav-link-dropdown flex items-center gap-1">Beranda</span>
     </a>
 
     <ul class="hidden md:flex items-center space-x-8 text-gray-600 font-medium">
@@ -62,7 +62,7 @@
       <li><a href="portofolio.html" class="nav-link">Portfolio</a></li>
     </ul>
     
-    <button class="hidden md:flex btn-animated group">
+    <button class="hidden md:flex btn-animated btn-white group">
       <span class="relative z-10">Contact Us</span>
     </button>
 
@@ -106,300 +106,41 @@
 </header>
 
     <main>
-      <section
-        class="relative h-[90vh] bg-cover bg-center text-white"
-        style="background-image: url('/assets/frontschool.png')"
-      >
-        <div class="absolute inset-0 bg-black opacity-50"></div>
-        <div
-          class="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center text-center items-center"
-        >
-          <p class="text-sm font-semibold uppercase tracking-widest mb-2">
-            SELAMAT DATANG DI
-          </p>
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4">
-            SMKN 1 DLANGGU
-          </h1>
-          <p class="text-lg md:text-xl max-w-3xl mb-8">
-            Membentuk Generasi Unggul, Kreatif, dan Siap Kerja. Menjadi lembaga
-            pendidikan vokasi terdepan yang menghasilkan lulusan berkompeten dan
-            berakhlak mulia.
-          </p>
-          <a href="profil.html#sejarah">
-            <button class="btn-animated btn-white group">
-              <span>Selengkapnya </span>
-            </button>
-          </a>
-        </div>
-      </section>
-      <section class="py-16 sm:py-20 bg-white seksikepsek">
-        <div
-          class="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center"
-        >
-          <div class="relative">
-            <img
-              src="/assets/foto-kepsek.png"
-              alt="Kepala Sekolah"
-              class="rounded-lg w-full z-10 relative"
-            />
-            <div
-              class="absolute -bottom-4 -left-4 w-full h-full bg-indigo-100 rounded-lg"
-            ></div>
-          </div>
-          <div>
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4">
-              Sambutan Hangat dari Kepala Sekolah
-            </h2>
-            <p class="text-xl sm:text-2xl font-bold text-gray-800">
-              Dr. Hj. Irni Istiqomah S.Pd., M.M.
-            </p>
-            <p class="text-gray-600 mb-6 leading-relaxed">
-              Assalamu'alaikum Wr. Wb. Selamat datang di website resmi SMKN 1
-              Dlanggu. Kami berkomitmen untuk menyediakan lingkungan belajar
-              yang inspiratif dan inovatif. Melalui website ini, kami berharap
-              dapat berbagi informasi dan pencapaian sekolah kepada masyarakat
-              luas. Mari bersama-sama kita majukan pendidikan vokasi Indonesia.
-            </p>
-
-            <p class="text-gray-500">Kepala SMKN 1 Dlanggu</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="py-16 sm:py-20 bg-gray-50">
-        <div
-          class="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-stretch"
-        >
-          <div
-            class="bg-white p-8 rounded-lg shadow-lg transform transition-all duration-500 hover:-translate-y-2 hover:bg-violet-800 hover:text-white group"
-          >
-            <h3
-              class="text-2xl font-bold mb-4 text-gray-800 group-hover:text-white"
-            >
-              VISI
-            </h3>
-            <p
-              class="text-xl sm:text-2xl text-gray-700 leading-relaxed group-hover:text-white"
-            >
-              "Visi SMK Negeri 1 Dlanggu adalah Terwujudnya Tamatan yang
-              Berkarakter Mulia"
-            </p>
-          </div>
-
-          <div
-            class="bg-white p-8 rounded-lg shadow-lg transform transition-all duration-500 hover:-translate-y-2 hover:bg-violet-800 hover:text-white group"
-          >
-            <h3
-              class="text-2xl font-bold mb-4 text-gray-800 group-hover:text-white"
-            >
-              MISI
-            </h3>
-            <ol
-              class="list-decimal list-inside space-y-2 text-gray-700 leading-relaxed group-hover:text-white"
-            >
-              <li>
-                Mewujudkan jiwa beriman dan bertaqwa, mandiri, kerjasama,
-                bernalar kritis, kreatif, bertanggung jawab, dan berkebhinekaan
-                global.
-              </li>
-              <li>
-                Melaksanakan kurikulum berstandar kompetensi sesuai kebutuhan
-                IDUKA.
-              </li>
-              <li>
-                Menumbuhkan sikap budaya kerja dan jiwa kewirausahaan di bidang
-                pariwisata, seni dan teknologi.
-              </li>
-              <li>
-                Meningkatkan profesionalisme tenaga pendidik dan kependidikan
-                yang mempunyai standar kompetensi sesuai dengan konsentrasi
-                keahlian.
-              </li>
-            </ol>
-          </div>
-        </div>
-      </section>
-      <section class="py-16 sm:py-20 bg-white">
-        <div class="container mx-auto px-4 text-center">
-          <h2 class="text-2xl sm:text-3xl font-bold mb-12">Kegiatan Terbaru</h2>
-          <div class="grid md:grid-cols-3 gap-8 text-left">
-            <div class="bg-gray-50 rounded-lg overflow-hidden group">
-              <img
-                src="/assets/berita-1.jpg"
-                alt="LKS Tingkat Provinsi"
-                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">
-                  SMKN 1 Dlanggu Borong Juara di LKS Tingkat Provinsi
-                </h3>
-                <p class="text-gray-600 leading-relaxed">
-                  Prestasi ini menunjukkan kualitas pendidikan yang unggul dan
-                  komitmen kami dalam mencetak lulusan yang kompeten.
+        <section class="relative h-[70vh] bg-cover bg-center text-white" style="background-image: url('/assets/frontschool.png')">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+            <div class="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center text-center items-center">
+                <p class="text-sm font-semibold uppercase tracking-widest mb-2">SELAMAT DATANG DI</p>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4">SMKN 1 DLANGGU</h1>
+                <p class="text-lg md:text-xl max-w-3xl mb-8">
+                    Membentuk Generasi Unggul, Kreatif, dan Siap Kerja. Menjadi lembaga pendidikan vokasi terdepan yang menghasilkan lulusan berkompeten dan berakhlak mulia.
                 </p>
-              </div>
+                <a href="profil.html#sejarah">
+                    <button class="btn-animated btn-white group"><span>Selengkapnya</span></button>
+                </a>
             </div>
-            <div class="bg-gray-50 rounded-lg overflow-hidden group">
-              <img
-                src="/assets/berita-2.jpg"
-                alt="Pelaksanaan ANBK 2025"
-                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">
-                  Pelaksanaan ANBK 2025 di SMKN 1 Dlanggu
-                </h3>
-                <p class="text-gray-600 leading-relaxed">
-                  Asesmen Nasional Berbasis Komputer diikuti oleh 45 peserta
-                  didik dari semua jurusan dengan lancar dan tertib.
-                </p>
-              </div>
-            </div>
-            <div class="bg-gray-50 rounded-lg overflow-hidden group">
-              <img
-                src="/assets/berita-3.jpg"
-                alt="Sharing Session"
-                class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">
-                  Sharing Session PT Padi Flour bersama Jurusan Kuliner
-                </h3>
-                <p class="text-gray-600 leading-relaxed">
-                  Acara ini bertujuan untuk memberikan wawasan industri dan demo
-                  'Product Knowledge' kepada siswa.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="py-16 sm:py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-800">
-              Portofolio Siswa
-            </h2>
-            <p class="text-gray-600 mt-2">
-              Lihat karya-karya terbaik dari siswa-siswi berprestasi kami.
-            </p>
-          </div>
-
-          <div
-            id="jurusan-filters-index"
-            class="flex justify-center flex-wrap gap-2 sm:gap-3 mb-10"
-          >
+        <section id="headline-berita" class="py-16 sm:py-20 bg-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-12">BERITA HEADLINE</h2>
+                <div id="headline-container" class="grid md:grid-cols-3 gap-8 text-left">
+                    </div>
             </div>
+        </section>
 
-          <div
-            id="portfolio-container-index"
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-          >
+        <section class="py-16 sm:py-20 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-800">Portofolio Siswa</h2>
+                    <p class="text-gray-600 mt-2">Lihat karya-karya terbaik dari siswa-siswi berprestasi kami.</p>
+                </div>
+                <div id="jurusan-filters-index" class="flex justify-center flex-wrap gap-2 sm:gap-3 mb-10"></div>
+                <div id="portfolio-container-index" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+                <div class="text-center mt-12">
+                    <a href="portofolio.html" class="inline-block bg-purple-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-700 transition-colors">Lihat Semua Portofolio</a>
+                </div>
             </div>
-
-          <div class="text-center mt-12">
-            <a
-              href="portofolio.html"
-              class="inline-block bg-purple-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-700 transition-colors"
-              >Lihat Semua Portofolio</a
-            >
-          </div>
-        </div>
-      </section>
-      <section class="py-16 sm:py-20 bg-white">
-        <div
-          class="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center"
-        >
-          <div>
-            <img src="/assets/faq-image.png" alt="FAQ" class="w-full h-auto" />
-          </div>
-          <div class="space-y-4">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-8">FAQ</h2>
-            <details
-              class="group bg-white p-6 rounded-lg shadow-sm cursor-pointer"
-            >
-              <summary
-                class="flex justify-between items-center font-semibold text-lg"
-              >
-                Apa saja Ekstra kulikuler di SMKN 1 Dlanggu?
-                <svg
-                  class="w-5 h-5 group-open:rotate-180 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </summary>
-              <p class="mt-4 text-gray-600">
-                Kami menyediakan berbagai macam ekstrakulikuler untuk menunjang
-                bakat dan minat siswa, seperti Paskibra, Pramuka, Futsal,
-                Basket, Seni Tari, dan Robotika.
-              </p>
-            </details>
-            <details
-              class="group bg-white p-6 rounded-lg shadow-sm cursor-pointer"
-            >
-              <summary
-                class="flex justify-between items-center font-semibold text-lg"
-              >
-                Apakah SMKN 1 Dlanggu Kerja sama dengan industri?
-                <svg
-                  class="w-5 h-5 group-open:rotate-180 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </summary>
-              <p class="mt-4 text-gray-600">
-                Tentu, kami menjalin kerjasama erat dengan berbagai perusahaan
-                dan industri terkemuka untuk program magang (PKL), kunjungan
-                industri, dan rekrutmen lulusan.
-              </p>
-            </details>
-            <details
-              class="group bg-white p-6 rounded-lg shadow-sm cursor-pointer"
-            >
-              <summary
-                class="flex justify-between items-center font-semibold text-lg"
-              >
-                Apa saja keahlian program keahlian di SMKN 1 Dlanggu?
-                <svg
-                  class="w-5 h-5 group-open:rotate-180 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </summary>
-              <p class="mt-4 text-gray-600">
-                Program keahlian kami meliputi Teknik Komputer dan Jaringan
-                (TKJ), Rekayasa Perangkat Lunak (RPL), Kuliner, Desain
-                Komunikasi Visual (DKV), Animasi, dan Perhotelan.
-              </p>
-            </details>
-          </div>
-        </div>
-      </section>
+        </section>
     </main>
 
     <footer class="bg-gray-900 text-white">
@@ -413,7 +154,7 @@
                 <ul class="space-y-2 text-gray-400">
                     <li><a href="profil.html" class="hover:text-white">Profil</a></li>
                     <li><a href="jurusan.html" class="hover:text-white">Jurusan</a></li>
-                    <li><a href="#" class="hover:text-white">Berita</a></li>
+                    <li><a href="berita.html" class="hover:text-white">Berita</a></li>
                     <li><a href="portofolio.html" class="hover:text-white">Portfolio</a></li>
                 </ul>
             </div>
