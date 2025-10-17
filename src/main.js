@@ -2,6 +2,9 @@
 
 import './style.css';
 import { initScrollReveal } from './animation.js';
+// Impor fungsi-fungsi yang diperlukan dari Firebase SDK
+import { db } from './firebase.js';
+import { collection, getDocs, query, limit } from "firebase/firestore";
 
 // Fungsi untuk menandai link navigasi yang aktif
 const setActiveLink = () => {
@@ -55,10 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', closeAllDropdowns);
     setActiveLink();
 
-    // --- LOGIKA HEADLINE BERITA ---
+    // --- LOGIKA HEADLINE BERITA DARI FIREBASE ---
     const headlineSection = document.getElementById('headline-berita');
     const headlineContainer = document.getElementById('headline-container');
-    // Ambil status dari localStorage, defaultnya 'true' (aktif)
     const headlineEnabled = localStorage.getItem('headlineEnabled') !== 'false';
 
     async function loadHeadlineBerita() {
@@ -67,13 +69,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         try {
-            // Memastikan fetch ke file yang benar: berita.json
-            const response = await fetch('/data/berita.json');
-            if (!response.ok) throw new Error('Data berita tidak ditemukan, pastikan file public/data/berita.json ada.');
-            
-            const beritaData = await response.json();
-            
-            headlineContainer.innerHTML = beritaData.slice(0, 3).map(berita => `
+            // Mengambil 3 berita teratas dari koleksi 'berita'
+            const beritaCol = collection(db, 'berita');
+            const q = query(beritaCol, limit(3));
+            const beritaSnapshot = await getDocs(q);
+            const beritaData = beritaSnapshot.docs.map(doc => doc.data());
+
+            if (beritaData.length === 0) {
+                 throw new Error('Tidak ada data berita di Firestore.');
+            }
+
+            headlineContainer.innerHTML = beritaData.map(berita => `
                 <div class="bg-gray-50 rounded-lg overflow-hidden group">
                     <img src="${berita.gambar}" alt="${berita.judul}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
                     <div class="p-6">
@@ -83,14 +89,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `).join('');
         } catch (error) {
-            console.error('Gagal memuat berita headline:', error);
-            headlineSection.style.display = 'none';
+            console.error('Gagal memuat berita headline dari Firestore:', error);
+            if(headlineSection) headlineSection.style.display = 'none';
         }
     }
     
     loadHeadlineBerita();
 
-    // --- LOGIKA PORTOFOLIO DI INDEX ---
+    // --- LOGIKA PORTOFOLIO DI INDEX DARI FIREBASE ---
     const portfolioContainerIndex = document.getElementById("portfolio-container-index");
     const jurusanFiltersIndex = document.getElementById("jurusan-filters-index");
 
@@ -126,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const setupJurusanFiltersIndex = () => {
             const jurusanKeys = Object.keys(portfolioData);
-            jurusanFiltersIndex.innerHTML = jurusanKeys.map(jurusan => 
+            jurusanFiltersIndex.innerHTML = jurusanKeys.map(jurusan =>
                 `<button class="px-4 py-2 text-sm font-medium rounded-full transition hover:bg-gray-300">${jurusan}</button>`
             ).join('');
             
@@ -141,15 +147,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const loadPortfolioDataIndex = async () => {
             try {
-                const response = await fetch("/data/portofolio.json");
-                if (!response.ok) throw new Error('Gagal memuat data portofolio');
-                portfolioData = await response.json();
-                jurusanSaatIni = Object.keys(portfolioData)[0];
-                setupJurusanFiltersIndex();
-                renderPortfolioIndex(jurusanSaatIni);
-                updateFilterButtonsIndex();
+                const portfolioCol = collection(db, 'portfolio');
+                const portfolioSnapshot = await getDocs(portfolioCol);
+                const portfolioList = portfolioSnapshot.docs.map(doc => doc.data());
+                
+                // Mengelompokkan data berdasarkan jurusan
+                portfolioData = {};
+                portfolioList.forEach(item => {
+                    const { jurusan } = item;
+                    if (!portfolioData[jurusan]) {
+                        portfolioData[jurusan] = [];
+                    }
+                    portfolioData[jurusan].push(item);
+                });
+
+                if (Object.keys(portfolioData).length > 0) {
+                    jurusanSaatIni = Object.keys(portfolioData)[0];
+                    setupJurusanFiltersIndex();
+                    renderPortfolioIndex(jurusanSaatIni);
+                    updateFilterButtonsIndex();
+                } else {
+                    throw new Error("Tidak ada data portfolio di Firestore.");
+                }
             } catch (error) {
-                console.error(error);
+                console.error('Gagal memuat data portofolio dari Firestore:', error);
                 portfolioContainerIndex.innerHTML = `<p class="text-center text-red-500 col-span-full">Gagal memuat data portofolio.</p>`;
             }
         };

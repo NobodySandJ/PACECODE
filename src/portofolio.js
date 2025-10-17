@@ -2,8 +2,8 @@
 
 import { sr } from './animation.js';
 // Impor fungsi-fungsi yang diperlukan dari Firebase SDK
-import { db } from './firebase.js'; 
-import { collection, getDocs } from "firebase/firestore"; 
+import { db } from './firebase.js';
+import { collection, getDocs } from "firebase/firestore";
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM Elements ---

@@ -2,31 +2,49 @@
 import './style.css';
 import { sr, initScrollReveal } from './animation.js';
 import './main.js'; // Impor main.js untuk fungsionalitas header
+// Impor fungsi-fungsi yang diperlukan dari Firebase SDK
+import { db } from './firebase.js';
+import { collection, getDocs } from "firebase/firestore";
 
 document.addEventListener('DOMContentLoaded', () => {
     const filtersContainer = document.getElementById('gallery-filters');
     const galleryContainer = document.getElementById('gallery-container');
-    let galleryData = {};
+    let galleryData = {}; // Format: { "Kategori 1": [item1, item2], "Kategori 2": [item3] }
     let currentCategory = 'Semua';
 
-    // Fungsi untuk memuat data galeri dari file JSON
+    // Fungsi untuk memuat data galeri dari Firestore
     async function loadGalleryData() {
         try {
-            const response = await fetch('/data/galeri.json');
-            if (!response.ok) throw new Error('Data galeri tidak ditemukan');
-            galleryData = await response.json();
+            galleryContainer.innerHTML = `<p class="text-center text-gray-500 col-span-full">Memuat galeri...</p>`;
+            const galeriCol = collection(db, 'galeri');
+            const galeriSnapshot = await getDocs(galeriCol);
+            const galeriList = galeriSnapshot.docs.map(doc => doc.data());
             
-            // Setelah data dimuat, siapkan filter dan tampilkan galeri awal
+            // Mengelompokkan data galeri berdasarkan kategori
+            galleryData = {};
+            galeriList.forEach(item => {
+                const { kategori } = item;
+                if (!kategori) return; // Lewati item tanpa kategori
+                if (!galleryData[kategori]) {
+                    galleryData[kategori] = [];
+                }
+                galleryData[kategori].push(item);
+            });
+
+            if (Object.keys(galleryData).length === 0) {
+                throw new Error("Tidak ada data galeri di Firestore.");
+            }
+            
             setupFilters();
             renderGallery();
 
         } catch (error) {
-            console.error('Gagal memuat data galeri:', error);
+            console.error('Gagal memuat data galeri dari Firestore:', error);
             galleryContainer.innerHTML = `<p class="text-center text-red-500 col-span-full">Gagal memuat data galeri.</p>`;
         }
     }
 
-    // Fungsi untuk membuat tombol-tombol filter berdasarkan kategori dari data
+    // Fungsi untuk membuat tombol-tombol filter
     function setupFilters() {
         if (!filtersContainer) return;
         const categories = ['Semua', ...Object.keys(galleryData)];
@@ -38,16 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         updateFilterButtons();
         
-        // Tambahkan event listener untuk setiap tombol filter
         filtersContainer.addEventListener('click', (e) => {
             if (e.target.classList.contains('filter-btn')) {
                 currentCategory = e.target.dataset.category;
-                renderGallery(); // Render ulang galeri saat filter diklik
+                renderGallery();
             }
         });
     }
 
-    // Fungsi untuk memperbarui tampilan visual tombol filter yang aktif
+    // Fungsi untuk memperbarui tampilan visual tombol filter
     function updateFilterButtons() {
         const buttons = filtersContainer.querySelectorAll('.filter-btn');
         buttons.forEach(button => {
@@ -61,23 +78,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fungsi untuk menampilkan gambar di galeri berdasarkan kategori yang dipilih
+    // Fungsi untuk menampilkan gambar di galeri
     function renderGallery() {
         if (!galleryContainer) return;
         galleryContainer.innerHTML = '';
         
         const itemsToRender = [];
         if (currentCategory === 'Semua') {
-            // Jika 'Semua' dipilih, gabungkan semua gambar dari semua kategori
             Object.values(galleryData).forEach(categoryItems => {
                 itemsToRender.push(...categoryItems);
             });
         } else {
-            // Jika kategori spesifik dipilih, ambil gambar dari kategori itu saja
             itemsToRender.push(...(galleryData[currentCategory] || []));
         }
 
-        // Buat elemen HTML untuk setiap item gambar dan tambahkan ke kontainer
         itemsToRender.forEach(item => {
             const galleryItem = document.createElement('div');
             galleryItem.className = 'group relative overflow-hidden rounded-lg shadow-lg cursor-pointer';
@@ -95,16 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         updateFilterButtons();
 
-        // Terapkan kembali animasi ScrollReveal ke item yang baru dirender
         sr.reveal('#gallery-container > .group', {
             delay: 100,
             origin: 'bottom',
             interval: 50,
-            cleanup: true // 'cleanup: true' penting agar animasi dapat diulang saat filter
+            cleanup: true
         });
     }
 
-    // Panggil fungsi utama untuk memuat data dan inisialisasi animasi
     loadGalleryData();
-    initScrollReveal(); 
+    initScrollReveal();
 });

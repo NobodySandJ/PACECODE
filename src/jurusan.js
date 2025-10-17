@@ -1,7 +1,9 @@
 import './style.css';
 import { initScrollReveal } from './animation.js';
+// Impor fungsi-fungsi yang diperlukan dari Firebase SDK
+import { db } from './firebase.js';
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-// Fungsi untuk logika dropdown navbar dan event listener lainnya
 function setupUIListeners() {
     const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
     const closeAllDropdowns = () => {
@@ -26,16 +28,48 @@ function setupUIListeners() {
     document.addEventListener('click', () => closeAllDropdowns());
 }
 
+// Fungsi untuk memuat data guru dari Firestore
+async function loadAndPopulateTeachers(jurusanNama) {
+    const guruSection = document.getElementById('guru-section');
+    const guruGrid = document.getElementById('guru-grid');
+    guruGrid.innerHTML = ''; // Kosongkan dulu
+
+    try {
+        const guruCol = collection(db, 'guru');
+        // Query guru berdasarkan nama jurusan
+        const q = query(guruCol, where("jurusan", "==", jurusanNama));
+        const guruSnapshot = await getDocs(q);
+        const guruData = guruSnapshot.docs.map(doc => doc.data());
+
+        if (guruData.length > 0) {
+            guruSection.classList.remove('hidden');
+            guruData.forEach(guru => {
+                const guruCard = document.createElement('div');
+                guruCard.innerHTML = `
+                    <img src="${guru.foto}" alt="${guru.nama}" class="w-full h-48 object-cover rounded-lg mx-auto shadow-md mb-2">
+                    <p class="font-semibold text-sm text-gray-700">${guru.nama}</p>
+                `;
+                guruGrid.appendChild(guruCard);
+            });
+        } else {
+            guruSection.classList.add('hidden');
+        }
+    } catch (error) {
+        console.error("Gagal memuat data guru dari Firestore:", error);
+        guruSection.classList.add('hidden');
+    }
+}
+
 // Fungsi untuk memuat konten jurusan dari JSON dan menampilkannya
 async function loadJurusanContent() {
     const params = new URLSearchParams(window.location.search);
-    // Default ke 'rpl' jika tidak ada parameter id di URL
     const currentJurusanId = params.get('id') || 'rpl';
 
     const contentJurusan = document.getElementById('content-jurusan');
     const contentError = document.getElementById('content-error');
     
     try {
+        // 1. Ambil data statis dari JSON
         const response = await fetch('/data/jurusan.json');
         if (!response.ok) throw new Error('Data tidak ditemukan');
         const allJurusanData = await response.json();
@@ -44,7 +78,10 @@ async function loadJurusanContent() {
 
         const currentData = allJurusanData[currentJurusanId];
         if (currentData) {
+            // 2. Tampilkan data statis
             populateMainContent(currentData);
+            // 3. Ambil data guru dari Firestore secara terpisah
+            await loadAndPopulateTeachers(currentData.nama);
         } else {
             showError();
         }
@@ -62,7 +99,7 @@ async function loadJurusanContent() {
 
 function populateSidebar(allData, currentId) {
     const sidebarList = document.getElementById('jurusan-list-sidebar');
-    sidebarList.innerHTML = ''; 
+    sidebarList.innerHTML = '';
 
     for (const id in allData) {
         const jurusan = allData[id];
@@ -84,6 +121,7 @@ function populateSidebar(allData, currentId) {
     }
 }
 
+// Fungsi ini sekarang hanya menampilkan data dari JSON, kecuali guru
 function populateMainContent(data) {
     document.title = `${data.nama} - SMKN 1 Dlanggu`;
     document.getElementById('breadcrumb').textContent = `Home / Jurusan / ${data.nama}`;
@@ -102,35 +140,16 @@ function populateMainContent(data) {
         keahlianList.appendChild(li);
     });
 
-    const guruSection = document.getElementById('guru-section');
-    const guruGrid = document.getElementById('guru-grid');
-    guruGrid.innerHTML = '';
-
-    if (data.guru && data.guru.length > 0) {
-        guruSection.classList.remove('hidden');
-        data.guru.forEach(guru => {
-            const guruCard = document.createElement('div');
-            guruCard.innerHTML = `
-                <img src="${guru.foto}" alt="${guru.nama}" class="w-full h-48 object-cover rounded-lg mx-auto shadow-md mb-2">
-                <p class="font-semibold text-sm text-gray-700">${guru.nama}</p>
-            `;
-            guruGrid.appendChild(guruCard);
-        });
-    } else {
-        guruSection.classList.add('hidden');
-    }
+    // Bagian guru akan diisi oleh fungsi loadAndPopulateTeachers
+    document.getElementById('guru-section').classList.add('hidden');
+    document.getElementById('guru-grid').innerHTML = '';
 }
 
 // ===================================
 // INISIALISASI HALAMAN
 // ===================================
 document.addEventListener('DOMContentLoaded', async () => {
-    // Jalankan setup UI yang statis terlebih dahulu
     setupUIListeners();
-
-    // 1. Tunggu (await) sampai semua konten dinamis selesai dimuat
     await loadJurusanContent();
-
-    // 2. Setelah konten dijamin ada, baru jalankan animasi
     initScrollReveal();
 });

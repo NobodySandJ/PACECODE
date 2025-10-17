@@ -1,6 +1,5 @@
 // src/admin.js
 
-// Impor fungsi-fungsi yang diperlukan dari Firebase SDK
 import { db } from './firebase.js';
 import { 
     collection, 
@@ -13,11 +12,11 @@ import {
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- GLOBAL STATE ---
-    let portfolioData = []; // Akan menyimpan dokumen portfolio dari Firestore
-    let guruData = [];      // Akan menyimpan dokumen guru dari Firestore
-    let beritaData = [];    // Akan menyimpan dokumen berita dari Firestore
-    let fasilitasData = []; // Akan menyimpan dokumen fasilitas dari Firestore
-    let jurusanOptions = []; // Untuk mengisi dropdown
+    let portfolioData = [];
+    let guruData = [];
+    let beritaData = [];
+    let fasilitasData = [];
+    let jurusanOptions = []; // Akan diisi dari data Firestore
 
     // --- DOM ELEMENTS ---
     const headlineToggle = document.getElementById('headline-toggle');
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalFooter = document.getElementById('modal-footer');
 
     // --- INITIALIZATION ---
-    // Mengatur toggle headline berdasarkan localStorage
     if (headlineToggle) {
         const headlineStatus = localStorage.getItem('headlineEnabled');
         headlineToggle.checked = headlineStatus === null ? true : headlineStatus === 'true';
@@ -54,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modalFooter.innerHTML = '';
     }
 
-    // Menutup modal jika area di luar modal diklik
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             hideModal();
@@ -64,90 +61,94 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DATA LOADING & RENDERING ---
     async function loadAllData() {
         try {
-            // Ambil data jurusan dari file JSON untuk mengisi dropdown
-            const jurusanRes = await fetch('/data/jurusan.json');
-            const jurusanJson = await jurusanRes.json();
-            jurusanOptions = Object.keys(jurusanJson);
-
-            // Render semua bagian
-            renderAll();
+            // Render semua bagian terlebih dahulu
+            await renderAll();
+            // Setelah semua data (terutama portfolio) dimuat, kita bisa mendapatkan opsi jurusan
+            setupJurusanOptions();
+            // Baru setelah itu, siapkan semua form
             setupAllForms();
         } catch (error) {
             console.error('Error memuat data awal:', error);
+            // Alert ini seharusnya tidak muncul lagi
             alert('Gagal memuat data konfigurasi. Periksa konsol untuk detail.');
         }
     }
     
-    function renderAll() {
-        renderPortfolio();
-        renderGuru();
-        renderBerita();
-        renderFasilitas();
+    async function renderAll() {
+        // renderPortfolio harus dijalankan pertama untuk mendapatkan daftar jurusan
+        await renderPortfolio(); 
+        await renderGuru();
+        await renderBerita();
+        await renderFasilitas();
     }
 
-    // --- PORTFOLIO CRUD ---
-    async function renderPortfolio() {
-        const listEl = document.getElementById('portfolio-list');
-        const jurusanSelect = document.querySelector('#portfolio-form select[name="jurusan"]');
+    // Fungsi baru untuk mengisi dropdown jurusan dari data portfolio yang ada
+    function setupJurusanOptions() {
+        const jurusanSet = new Set(portfolioData.map(item => item.jurusan));
+        jurusanOptions = [...jurusanSet];
         
-        jurusanSelect.innerHTML = jurusanOptions.map(j => `<option value="${j}">${j}</option>`).join('');
-        listEl.innerHTML = '<p class="text-gray-500">Memuat data portfolio...</p>';
+        // Perbarui semua dropdown di halaman
+        const jurusanSelects = document.querySelectorAll('select[name="jurusan"]');
+        jurusanSelects.forEach(select => {
+            select.innerHTML = jurusanOptions.map(j => `<option value="${j}">${j}</option>`).join('');
+        });
+    }
 
-        const portfolioCol = collection(db, 'portfolio');
-        const portfolioSnapshot = await getDocs(portfolioCol);
+    // --- GENERIC CRUD FUNCTIONS ---
+    async function renderItems(collectionName, listElementId, dataArray, editHandler, deleteHandler) {
+        const listEl = document.getElementById(listElementId);
+        listEl.innerHTML = `<p class="text-gray-500">Memuat data ${collectionName}...</p>`;
         
-        portfolioData = portfolioSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const colRef = collection(db, collectionName);
+        const snapshot = await getDocs(colRef);
+        
+        dataArray.length = 0; // Kosongkan array
+        snapshot.docs.forEach(doc => dataArray.push({ id: doc.id, ...doc.data() }));
         listEl.innerHTML = '';
 
-        if(portfolioData.length === 0) {
-            listEl.innerHTML = '<p class="text-gray-500">Belum ada data portfolio.</p>';
+        if (dataArray.length === 0) {
+            listEl.innerHTML = `<p class="text-gray-500">Belum ada data ${collectionName}.</p>`;
             return;
         }
 
-        portfolioData.forEach(item => {
+        dataArray.forEach(item => {
             const div = document.createElement('div');
             div.className = 'p-4 border rounded-lg flex justify-between items-center';
+            const title = item.namaProject || item.nama || item.judul;
+            const subtitle = item.jurusan || item.ringkasan || `ID: ${item.id}`;
             div.innerHTML = `
                 <div>
-                    <p class="font-bold">${item.namaProject}</p>
-                    <p class="text-sm text-gray-600">${item.nama} - ${item.jurusan}</p>
+                    <p class="font-bold">${title}</p>
+                    <p class="text-sm text-gray-600">${subtitle}</p>
                 </div>
                 <div>
-                    <button data-id="${item.id}" class="edit-portfolio px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Edit</button>
-                    <button data-id="${item.id}" class="delete-portfolio px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Hapus</button>
+                    <button data-id="${item.id}" class="edit-btn px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Edit</button>
+                    <button data-id="${item.id}" class="delete-btn px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Hapus</button>
                 </div>`;
             listEl.appendChild(div);
         });
 
-        listEl.querySelectorAll('.edit-portfolio').forEach(btn => btn.addEventListener('click', (e) => editPortfolio(e.target.dataset.id)));
-        listEl.querySelectorAll('.delete-portfolio').forEach(btn => btn.addEventListener('click', (e) => deletePortfolio(e.target.dataset.id)));
+        listEl.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', (e) => editHandler(e.target.dataset.id)));
+        listEl.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', (e) => deleteHandler(e.target.dataset.id)));
+    }
+
+    // --- Portfolio Section ---
+    async function renderPortfolio() {
+        await renderItems('portfolio', 'portfolio-list', portfolioData, editPortfolio, deletePortfolio);
     }
 
     async function editPortfolio(id) {
         const item = portfolioData.find(p => p.id === id);
+        const jurusanOptionsHtml = jurusanOptions.map(j => `<option value="${j}" ${item.jurusan === j ? 'selected' : ''}>${j}</option>`).join('');
         const body = `
             <form id="edit-portfolio-form" class="space-y-4">
                 <input type="hidden" name="id" value="${item.id}">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Siswa</label>
-                    <input type="text" name="nama" value="${item.nama}" class="mt-1 block w-full p-2 border rounded-md">
-                </div>
-                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Proyek</label>
-                    <input type="text" name="namaProject" value="${item.namaProject}" class="mt-1 block w-full p-2 border rounded-md">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Deskripsi Singkat</label>
-                    <textarea name="deskripsiSingkat" class="mt-1 block w-full p-2 border rounded-md">${item.deskripsiSingkat}</textarea>
-                </div>
-                 <div>
-                    <label class="block text-sm font-medium text-gray-700">URL Foto</label>
-                    <input type="text" name="fotoProject" value="${item.fotoProject}" class="mt-1 block w-full p-2 border rounded-md">
-                </div>
-                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Tempat Bekerja (opsional)</label>
-                    <input type="text" name="bekerja" value="${item.bekerja || ''}" class="mt-1 block w-full p-2 border rounded-md">
-                </div>
+                <div><label class="block text-sm">Nama Siswa</label><input type="text" name="nama" value="${item.nama}" class="mt-1 block w-full p-2 border rounded-md"></div>
+                <div><label class="block text-sm">Nama Proyek</label><input type="text" name="namaProject" value="${item.namaProject}" class="mt-1 block w-full p-2 border rounded-md"></div>
+                <div><label class="block text-sm">Deskripsi Singkat</label><textarea name="deskripsiSingkat" class="mt-1 block w-full p-2 border rounded-md">${item.deskripsiSingkat}</textarea></div>
+                <div><label class="block text-sm">URL Foto</label><input type="text" name="fotoProject" value="${item.fotoProject}" class="mt-1 block w-full p-2 border rounded-md"></div>
+                <div><label class="block text-sm">Jurusan</label><select name="jurusan" class="mt-1 block w-full p-2 border rounded-md">${jurusanOptionsHtml}</select></div>
+                <div><label class="block text-sm">Tempat Bekerja (opsional)</label><input type="text" name="bekerja" value="${item.bekerja || ''}" class="mt-1 block w-full p-2 border rounded-md"></div>
             </form>`;
         const footer = `<button id="cancel-btn" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Batal</button>
                         <button id="save-btn" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Simpan</button>`;
@@ -156,15 +157,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('save-btn').addEventListener('click', async () => {
             const form = document.getElementById('edit-portfolio-form');
             const formData = new FormData(form);
-            const docRef = doc(db, "portfolio", id);
-            await updateDoc(docRef, {
+            await updateDoc(doc(db, "portfolio", id), {
                 nama: formData.get('nama'),
                 namaProject: formData.get('namaProject'),
                 deskripsiSingkat: formData.get('deskripsiSingkat'),
                 fotoProject: formData.get('fotoProject'),
+                jurusan: formData.get('jurusan'),
                 bekerja: formData.get('bekerja') || null
             });
-            renderPortfolio();
+            await renderPortfolio();
             hideModal();
         });
         document.getElementById('cancel-btn').addEventListener('click', hideModal);
@@ -179,80 +180,196 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
             await deleteDoc(doc(db, "portfolio", id));
-            renderPortfolio();
+            await renderPortfolio();
+            setupJurusanOptions(); // Update jurusan options in case a whole category is deleted
             hideModal();
         });
         document.getElementById('cancel-btn').addEventListener('click', hideModal);
     }
 
-    // --- GURU, BERITA, FASILITAS (Placeholder functions, implementasi mirip Portfolio) ---
+    // --- Guru Section ---
     async function renderGuru() {
-        const listEl = document.getElementById('guru-list');
-        listEl.innerHTML = '<p class="text-gray-500">Fitur kelola guru belum diimplementasikan.</p>';
-        // Implementasi lengkap akan mirip dengan renderPortfolio, tetapi menargetkan collection 'guru'
+        await renderItems('guru', 'guru-list', guruData, editGuru, deleteGuru);
+    }
+    
+    // (Fungsi editGuru dan deleteGuru sama seperti sebelumnya, tidak perlu diubah)
+    async function editGuru(id) {
+        const item = guruData.find(g => g.id === id);
+        const jurusanOptionsHtml = jurusanOptions.map(j => `<option value="${j}" ${item.jurusan === j ? 'selected' : ''}>${j}</option>`).join('');
+        const body = `
+            <form id="edit-guru-form" class="space-y-4">
+                <div><label class="block text-sm">Nama Guru</label><input type="text" name="nama" value="${item.nama}" class="mt-1 block w-full p-2 border rounded-md"></div>
+                <div><label class="block text-sm">URL Foto</label><input type="text" name="foto" value="${item.foto}" class="mt-1 block w-full p-2 border rounded-md"></div>
+                <div><label class="block text-sm">Jurusan</label><select name="jurusan" class="mt-1 block w-full p-2 border rounded-md">${jurusanOptionsHtml}</select></div>
+            </form>`;
+        const footer = `<button id="cancel-btn" class="px-4 py-2 bg-gray-200 rounded">Batal</button><button id="save-btn" class="px-4 py-2 bg-indigo-600 text-white rounded">Simpan</button>`;
+        showModal(`Edit Guru: ${item.nama}`, body, footer);
+
+        document.getElementById('save-btn').addEventListener('click', async () => {
+            const form = document.getElementById('edit-guru-form');
+            const formData = new FormData(form);
+            await updateDoc(doc(db, "guru", id), {
+                nama: formData.get('nama'),
+                foto: formData.get('foto'),
+                jurusan: formData.get('jurusan')
+            });
+            await renderGuru();
+            hideModal();
+        });
+        document.getElementById('cancel-btn').addEventListener('click', hideModal);
+    }
+    async function deleteGuru(id) {
+        const item = guruData.find(g => g.id === id);
+        showModal('Konfirmasi Hapus', `<p>Anda yakin ingin menghapus guru <strong>${item.nama}</strong>?</p>`, `<button id="cancel-btn" class="px-4 py-2 bg-gray-200 rounded">Batal</button><button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded">Hapus</button>`);
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            await deleteDoc(doc(db, "guru", id));
+            await renderGuru();
+            hideModal();
+        });
+        document.getElementById('cancel-btn').addEventListener('click', hideModal);
     }
 
+    // --- Berita Section ---
     async function renderBerita() {
-        const listEl = document.getElementById('berita-list');
-        listEl.innerHTML = '<p class="text-gray-500">Fitur kelola berita belum diimplementasikan.</p>';
-        // Implementasi lengkap akan mirip dengan renderPortfolio, tetapi menargetkan collection 'berita'
+        await renderItems('berita', 'berita-list', beritaData, editBerita, deleteBerita);
+    }
+    
+    // (Fungsi editBerita dan deleteBerita sama seperti sebelumnya, tidak perlu diubah)
+     async function editBerita(id) {
+        const item = beritaData.find(b => b.id === id);
+        const body = `
+            <form id="edit-berita-form" class="space-y-4">
+                <div><label class="block text-sm">Judul Berita</label><input type="text" name="judul" value="${item.judul}" class="mt-1 block w-full p-2 border rounded-md"></div>
+                <div><label class="block text-sm">Ringkasan</label><textarea name="ringkasan" class="mt-1 block w-full p-2 border rounded-md">${item.ringkasan}</textarea></div>
+                <div><label class="block text-sm">URL Gambar</label><input type="text" name="gambar" value="${item.gambar}" class="mt-1 block w-full p-2 border rounded-md"></div>
+            </form>`;
+        const footer = `<button id="cancel-btn" class="px-4 py-2 bg-gray-200 rounded">Batal</button><button id="save-btn" class="px-4 py-2 bg-indigo-600 text-white rounded">Simpan</button>`;
+        showModal(`Edit Berita: ${item.judul}`, body, footer);
+
+        document.getElementById('save-btn').addEventListener('click', async () => {
+            const form = document.getElementById('edit-berita-form');
+            const formData = new FormData(form);
+            await updateDoc(doc(db, "berita", id), {
+                judul: formData.get('judul'),
+                ringkasan: formData.get('ringkasan'),
+                gambar: formData.get('gambar')
+            });
+            await renderBerita();
+            hideModal();
+        });
+        document.getElementById('cancel-btn').addEventListener('click', hideModal);
+    }
+    async function deleteBerita(id) {
+        const item = beritaData.find(b => b.id === id);
+        showModal('Konfirmasi Hapus', `<p>Anda yakin ingin menghapus berita <strong>${item.judul}</strong>?</p>`, `<button id="cancel-btn" class="px-4 py-2 bg-gray-200 rounded">Batal</button><button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded">Hapus</button>`);
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            await deleteDoc(doc(db, "berita", id));
+            await renderBerita();
+            hideModal();
+        });
+        document.getElementById('cancel-btn').addEventListener('click', hideModal);
     }
 
+    // --- Fasilitas Section ---
     async function renderFasilitas() {
-         const listEl = document.getElementById('fasilitas-list');
-         listEl.innerHTML = '<p class="text-gray-500">Fitur kelola fasilitas belum diimplementasikan.</p>';
-         // Implementasi lengkap akan mirip dengan renderPortfolio, tetapi menargetkan collection 'fasilitas'
+        await renderItems('fasilitas', 'fasilitas-list', fasilitasData, editFasilitas, deleteFasilitas);
+    }
+    
+    // (Fungsi editFasilitas dan deleteFasilitas sama seperti sebelumnya, tidak perlu diubah)
+     async function editFasilitas(id) {
+        const item = fasilitasData.find(f => f.id === id);
+        const body = `
+            <form id="edit-fasilitas-form" class="space-y-4">
+                <div><label class="block text-sm">Nama Fasilitas</label><input type="text" name="nama" value="${item.nama}" class="mt-1 block w-full p-2 border rounded-md"></div>
+                <div><label class="block text-sm">URL Gambar</label><input type="text" name="gambar" value="${item.gambar}" class="mt-1 block w-full p-2 border rounded-md"></div>
+            </form>`;
+        const footer = `<button id="cancel-btn" class="px-4 py-2 bg-gray-200 rounded">Batal</button><button id="save-btn" class="px-4 py-2 bg-indigo-600 text-white rounded">Simpan</button>`;
+        showModal(`Edit Fasilitas: ${item.nama}`, body, footer);
+
+        document.getElementById('save-btn').addEventListener('click', async () => {
+            const form = document.getElementById('edit-fasilitas-form');
+            const formData = new FormData(form);
+            await updateDoc(doc(db, "fasilitas", id), {
+                nama: formData.get('nama'),
+                gambar: formData.get('gambar')
+            });
+            await renderFasilitas();
+            hideModal();
+        });
+        document.getElementById('cancel-btn').addEventListener('click', hideModal);
+    }
+    async function deleteFasilitas(id) {
+        const item = fasilitasData.find(f => f.id === id);
+        showModal('Konfirmasi Hapus', `<p>Anda yakin ingin menghapus fasilitas <strong>${item.nama}</strong>?</p>`, `<button id="cancel-btn" class="px-4 py-2 bg-gray-200 rounded">Batal</button><button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded">Hapus</button>`);
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            await deleteDoc(doc(db, "fasilitas", id));
+            await renderFasilitas();
+            hideModal();
+        });
+        document.getElementById('cancel-btn').addEventListener('click', hideModal);
     }
     
     // --- FORM SETUP ---
     function setupAllForms() {
-        // Form untuk menambah Portfolio
-        document.getElementById('portfolio-form').addEventListener('submit', async (e) => {
+        // Generic function for handling form submission
+        async function handleFormSubmit(e, collectionName, dataMapper, renderFunc) {
             e.preventDefault();
             const form = e.target;
-            const formData = new FormData(form);
-            const newPortfolio = {
-                nama: formData.get('nama'),
-                namaProject: formData.get('namaProject'),
-                deskripsiSingkat: formData.get('deskripsiSingkat'),
-                bekerja: formData.get('bekerja') || null,
-                fotoProject: formData.get('fotoProject'),
-                jurusan: formData.get('jurusan'),
-                deskripsiLengkap: "Deskripsi lengkap akan ditambahkan kemudian.",
-                linkProject: "#"
-            };
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Menambahkan...';
 
             try {
-                const docRef = await addDoc(collection(db, "portfolio"), newPortfolio);
-                console.log("Document written with ID: ", docRef.id);
-                renderPortfolio();
+                const newData = dataMapper(new FormData(form));
+                await addDoc(collection(db, collectionName), newData);
+                await renderFunc();
+                
+                // Jika data portfolio baru ditambahkan, perbarui opsi jurusan
+                if (collectionName === 'portfolio') {
+                    setupJurusanOptions();
+                }
+
                 form.reset();
-                alert('Portfolio berhasil ditambahkan!');
+                alert(`${collectionName.charAt(0).toUpperCase() + collectionName.slice(1)} berhasil ditambahkan!`);
             } catch (error) {
-                console.error("Error adding document: ", error);
-                alert('Gagal menambahkan portfolio.');
+                console.error(`Error adding ${collectionName}: `, error);
+                alert(`Gagal menambahkan ${collectionName}.`);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = `Tambah ${collectionName.charAt(0).toUpperCase() + collectionName.slice(1)}`;
             }
-        });
+        }
 
-        // Placeholder untuk form lainnya
-        document.getElementById('guru-form').addEventListener('submit', e => {
-            e.preventDefault();
-            alert('Fitur tambah guru belum diimplementasikan.');
-        });
+        document.getElementById('portfolio-form').addEventListener('submit', (e) => handleFormSubmit(e, 'portfolio', (formData) => ({
+            nama: formData.get('nama'),
+            namaProject: formData.get('namaProject'),
+            deskripsiSingkat: formData.get('deskripsiSingkat'),
+            bekerja: formData.get('bekerja') || null,
+            fotoProject: formData.get('fotoProject'),
+            jurusan: formData.get('jurusan'),
+            deskripsiLengkap: "Deskripsi lengkap akan ditambahkan kemudian.",
+            linkProject: "#"
+        }), renderPortfolio));
 
-        document.getElementById('berita-form').addEventListener('submit', e => {
-            e.preventDefault();
-            alert('Fitur tambah berita belum diimplementasikan.');
-        });
+        document.getElementById('guru-form').addEventListener('submit', (e) => handleFormSubmit(e, 'guru', (formData) => ({
+            nama: formData.get('nama'),
+            foto: formData.get('foto'),
+            jurusan: formData.get('jurusan')
+        }), renderGuru));
 
-        document.getElementById('fasilitas-form').addEventListener('submit', e => {
-             e.preventDefault();
-             alert('Fitur tambah fasilitas belum diimplementasikan.');
-        });
+        document.getElementById('berita-form').addEventListener('submit', (e) => handleFormSubmit(e, 'berita', (formData) => ({
+            judul: formData.get('judul'),
+            ringkasan: formData.get('ringkasan'),
+            gambar: formData.get('gambar')
+        }), renderBerita));
+
+        document.getElementById('fasilitas-form').addEventListener('submit', (e) => handleFormSubmit(e, 'fasilitas', (formData) => ({
+            nama: formData.get('nama'),
+            gambar: formData.get('gambar')
+        }), renderFasilitas));
     }
     
     // --- HELPERS ---
-    // Fungsi untuk highlight navigasi sidebar berdasarkan posisi scroll
     function setupScrollSpy() {
         const sections = document.querySelectorAll('main section[id]');
         const navLinks = document.querySelectorAll('#admin-nav a');
