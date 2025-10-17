@@ -23,12 +23,15 @@
 
     <header class="bg-white shadow-sm sticky top-0 z-50">
   <nav class="container mx-auto px-4 py-2 flex justify-between items-center">
-    <a href="/" class="flex items-center space-x-3">
-      <img src="/assets/logo.png" alt="Logo Sekolah" class="h-12" />
-      <span class="text-xl font-bold text-gray-800">SMKN 1 Dlanggu</span>
-    </a>
+    <div class="flex-shrink-0">
+      <a href="/" class="flex items-center space-x-3">
+        <img src="/assets/logo.png" alt="Logo Sekolah" class="h-12" />
+        <!-- <span class="text-xl font-bold text-gray-800 hidden sm:inline">Beranda</span> -->
+      </a>
+    </div>
 
     <ul class="hidden md:flex items-center space-x-8 text-gray-600 font-medium">
+      <li><a href="index.html" class="nav-link">Beranda</a></li>
       <li class="relative">
         <a href="profil.html" class="nav-link nav-link-dropdown flex items-center gap-1">
           Profil
@@ -66,7 +69,7 @@
       <li><a href="portofolio.html" class="nav-link">Portfolio</a></li>
     </ul>
     
-    <button class="hidden md:flex btn-animated group">
+    <button class="hidden md:flex btn-animated btn-white group">
       <span class="relative z-10">Contact Us</span>
     </button>
 
