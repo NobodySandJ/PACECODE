@@ -7,7 +7,7 @@
     { "source": "/berita", "destination": "/berita.html" },
     { "source": "/fasilitas", "destination": "/fasilitas.html" },
     { "source": "/guru", "destination": "/guru.html" },
-    { "source": "/galeri", "destination": "/galeri.html" }
+    { "source": "/galeri", "destination": "/galeri.html" },
     { "source": "/admin", "destination": "/admin.html" }
   ]
 }
