@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+#admin-modal.hidden { display: none; }
+
 @layer components {
 
   /* TAMBAHKAN KODE INI */
