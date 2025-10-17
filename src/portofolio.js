@@ -1,27 +1,22 @@
-// Impor 'sr' dari animation.js agar bisa digunakan di sini
+// src/portofolio.js
+
 import { sr } from './animation.js';
+// Impor fungsi-fungsi yang diperlukan dari Firebase SDK
+import { db } from './firebase.js'; 
+import { collection, getDocs } from "firebase/firestore"; 
 
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
+    // --- DOM Elements ---
     const jurusanNav = document.getElementById('jurusan-filters');
     const sudahBekerjaContainer = document.getElementById('sudah-bekerja-container');
     const belumBekerjaContainer = document.getElementById('belum-bekerja-container');
+    const modalContainer = document.getElementById('modal');
 
-    // Modal elements (Pastikan ID ini ada di portofolio.html Anda)
-    const modal = document.getElementById('modal');
-    // Perhatikan: portofolio.html tidak memiliki elemen-elemen modal ini, 
-    // jadi saya akan menambahkan pengecekan agar tidak error.
-    // Jika Anda ingin modal berfungsi, Anda perlu menambahkan HTML-nya.
-    const closeModalBtn = document.getElementById('close-modal');
-    const modalJudul = document.getElementById('modal-judul');
-    const modalFoto = document.getElementById('modal-foto');
-    const modalDeskripsi = document.getElementById('modal-deskripsi');
-    const modalLink = document.getElementById('modal-link');
-
+    // --- State ---
     let portfolioData = {};
     let jurusanSaatIni = '';
 
-    // Skema Warna untuk Setiap Jurusan
+    // --- Konfigurasi Warna ---
     const jurusanColors = {
         "Rekayasa Perangkat Lunak": { border: "border-blue-500", button: "bg-blue-600 hover:bg-blue-700", tag: "text-blue-600" },
         "Teknik Komputer dan Jaringan": { border: "border-red-500", button: "bg-red-600 hover:bg-red-700", tag: "text-red-600" },
@@ -30,24 +25,48 @@ document.addEventListener('DOMContentLoaded', () => {
         "Kuliner": { border: "border-orange-500", button: "bg-orange-500 hover:bg-orange-600", tag: "text-orange-500" },
         "Perhotelan": { border: "border-yellow-500", button: "bg-yellow-500 hover:bg-yellow-600", tag: "text-yellow-500" }
     };
-    
     const defaultColors = { border: "border-indigo-500", button: "bg-indigo-600 hover:bg-indigo-700", tag: "text-indigo-600" };
 
+    /**
+     * Mengambil data dari Firestore dan mengubahnya menjadi format yang bisa digunakan
+     */
     async function loadPortfolioData() {
         try {
-            const response = await fetch('/data/portofolio.json');
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            portfolioData = await response.json();
-            jurusanSaatIni = Object.keys(portfolioData)[0];
+            sudahBekerjaContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Memuat data...</p>';
+            belumBekerjaContainer.innerHTML = '';
+            
+            const portfolioCol = collection(db, 'portfolio');
+            const portfolioSnapshot = await getDocs(portfolioCol);
+            
+            const portfolioList = portfolioSnapshot.docs.map(doc => doc.data());
 
-            setupJurusanNavigation();
-            renderPortfolio(jurusanSaatIni);
+            // Mengelompokkan data portfolio berdasarkan jurusan
+            portfolioData = {};
+            portfolioList.forEach(item => {
+                const { jurusan } = item;
+                if (!portfolioData[jurusan]) {
+                    portfolioData[jurusan] = [];
+                }
+                portfolioData[jurusan].push(item);
+            });
+
+            if (Object.keys(portfolioData).length > 0) {
+                jurusanSaatIni = Object.keys(portfolioData)[0];
+                setupJurusanNavigation();
+                renderPortfolio(jurusanSaatIni);
+            } else {
+                 sudahBekerjaContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Belum ada data portfolio untuk ditampilkan.</p>';
+            }
 
         } catch (error) {
-            console.error("Gagal memuat data portofolio:", error);
+            console.error("Gagal memuat data portofolio dari Firestore:", error);
+            sudahBekerjaContainer.innerHTML = '<p class="col-span-full text-center text-red-500">Gagal memuat data. Silakan coba lagi nanti.</p>';
         }
     }
 
+    /**
+     * Membuat HTML untuk satu kartu portfolio
+     */
     const createPortfolioCard = (data, jurusan) => {
         const colors = jurusanColors[jurusan] || defaultColors;
         const card = document.createElement('div');
@@ -79,6 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return card;
     };
     
+    /**
+     * Merender semua kartu portfolio ke dalam kontainer yang sesuai
+     */
     const renderPortfolio = (jurusan) => {
         sudahBekerjaContainer.innerHTML = '';
         belumBekerjaContainer.innerHTML = '';
@@ -86,20 +108,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const dataJurusan = portfolioData[jurusan];
         if (!dataJurusan) return;
 
+        let sudahBekerjaCount = 0;
+        let belumBekerjaCount = 0;
+
         dataJurusan.forEach(item => {
             const card = createPortfolioCard(item, jurusan);
             if (item.bekerja) {
                 sudahBekerjaContainer.appendChild(card);
+                sudahBekerjaCount++;
             } else {
                 belumBekerjaContainer.appendChild(card);
+                belumBekerjaCount++;
             }
         });
         
-        // TAMBAHKAN INI: Re-apply animasi ke elemen baru setelah filter
-        sr.reveal('#sudah-bekerja-container > div', { delay: 200, origin: 'bottom', interval: 100, cleanup: true });
-        sr.reveal('#belum-bekerja-container > div', { delay: 200, origin: 'bottom', interval: 100, cleanup: true });
+        if (sudahBekerjaCount === 0) {
+            sudahBekerjaContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Belum ada lulusan yang bekerja dari jurusan ini.</p>';
+        }
+        if (belumBekerjaCount === 0) {
+            belumBekerjaContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">Semua lulusan dari jurusan ini sudah bekerja.</p>';
+        }
+
+        // Terapkan kembali animasi ScrollReveal ke elemen yang baru dirender
+        sr.reveal('#sudah-bekerja-container > div', { delay: 100, origin: 'bottom', interval: 50, cleanup: true });
+        sr.reveal('#belum-bekerja-container > div', { delay: 100, origin: 'bottom', interval: 50, cleanup: true });
     };
 
+    /**
+     * Membuat tombol filter jurusan
+     */
     const setupJurusanNavigation = () => {
         jurusanNav.innerHTML = '';
         const jurusanKeys = Object.keys(portfolioData);
@@ -107,13 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const button = document.createElement('button');
             button.textContent = jurusan;
             button.className = `px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-2`;
-
-            if (jurusan === jurusanSaatIni) {
-                button.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
-            } else {
-                button.classList.add('bg-white', 'text-gray-700', 'border-gray-300', 'hover:bg-indigo-50', 'hover:border-indigo-500');
-            }
-
             button.addEventListener('click', () => {
                 jurusanSaatIni = jurusan;
                 renderPortfolio(jurusan);
@@ -121,45 +151,79 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             jurusanNav.appendChild(button);
         });
+        updateNavButtons(); // Panggil untuk set state awal
     };
 
+    /**
+     * Memperbarui tampilan tombol filter yang aktif
+     */
     const updateNavButtons = () => {
         Array.from(jurusanNav.children).forEach(button => {
-            button.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
-            button.classList.add('bg-white', 'text-gray-700', 'border-gray-300', 'hover:bg-indigo-50', 'hover:border-indigo-500');
-            if (button.textContent === jurusanSaatIni) {
-                button.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
-                button.classList.remove('bg-white', 'text-gray-700', 'border-gray-300', 'hover:bg-indigo-50', 'hover:border-indigo-500');
-            }
+            const isSelected = button.textContent === jurusanSaatIni;
+            button.classList.toggle('bg-indigo-600', isSelected);
+            button.classList.toggle('text-white', isSelected);
+            button.classList.toggle('border-indigo-600', isSelected);
+            button.classList.toggle('bg-white', !isSelected);
+            button.classList.toggle('text-gray-700', !isSelected);
+            button.classList.toggle('border-gray-300', !isSelected);
+            button.classList.toggle('hover:bg-indigo-50', !isSelected);
+            button.classList.toggle('hover:border-indigo-500', !isSelected);
         });
     };
 
+    /**
+     * Menampilkan modal dengan detail proyek
+     */
     const openModal = (data) => {
-        if (!modal || !modalJudul || !modalFoto || !modalDeskripsi || !modalLink) return;
-        modalJudul.textContent = data.namaProject;
-        modalFoto.src = data.fotoProject;
-        modalDeskripsi.textContent = data.deskripsiLengkap;
-        modalLink.href = data.linkProject;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        modalContainer.innerHTML = `
+            <div class="bg-white rounded-lg shadow-2xl w-full max-w-2xl transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+                <img src="${data.fotoProject}" alt="${data.namaProject}" class="w-full h-64 object-cover rounded-t-lg">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold mb-2" id="modal-judul">${data.namaProject}</h3>
+                    <p class="text-sm text-gray-500 mb-4">Oleh: ${data.nama} - ${data.jurusan}</p>
+                    <p class="text-gray-700" id="modal-deskripsi">${data.deskripsiLengkap || data.deskripsiSingkat}</p>
+                </div>
+                <div class="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end">
+                    <button id="close-modal" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-semibold">Tutup</button>
+                </div>
+            </div>
+        `;
+        
+        modalContainer.classList.remove('hidden');
+        modalContainer.classList.add('flex');
+        
+        // Animasi saat modal muncul
+        setTimeout(() => {
+            document.getElementById('modal-content').classList.remove('scale-95', 'opacity-0');
+            document.getElementById('modal-content').classList.add('scale-100', 'opacity-100');
+        }, 10);
+
+        document.getElementById('close-modal').addEventListener('click', closeModal);
     };
 
+    /**
+     * Menutup modal
+     */
     const closeModal = () => {
-        if (!modal) return;
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
+        const modalContent = document.getElementById('modal-content');
+        if (modalContent) {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+        }
+        setTimeout(() => {
+            modalContainer.classList.add('hidden');
+            modalContainer.classList.remove('flex');
+            modalContainer.innerHTML = '';
+        }, 200); // Tunggu animasi selesai
     };
 
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeModal);
-    }
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-    }
+    // Menutup modal jika area di luar diklik
+    modalContainer.addEventListener('click', (e) => {
+        if (e.target === modalContainer) {
+            closeModal();
+        }
+    });
 
+    // Memulai proses
     loadPortfolioData();
 });
