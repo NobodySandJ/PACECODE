@@ -17,5 +17,18 @@
     "firebase-admin": "^13.5.0",
     "scrollreveal": "^4.0.9",
     "tailwindcss": "^4.1.13"
-  }
+  },
+  "main": "tailwind.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NobodySandJ/PACECODE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NobodySandJ/PACECODE/issues"
+  },
+  "homepage": "https://github.com/NobodySandJ/PACECODE#readme",
+  "description": ""
 }

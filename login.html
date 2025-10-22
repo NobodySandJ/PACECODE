@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - SMKN 1 Dlanggu</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="font-['Poppins',_sans-serif] bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <p id="error-message" class="text-red-500 text-sm hidden"></p>
+            <button type="submit" class="w-full btn-animated group bg-indigo-600 text-white">
+                <span class="relative z-10">Login</span>
+            </button>
+        </form>
+        <p class="mt-4 text-center text-sm text-gray-600">
+            Belum punya akun? <a href="register.html" class="font-medium text-indigo-600 hover:text-indigo-500">Daftar di sini</a>
+        </p>
+         <p class="mt-2 text-center text-sm text-gray-600">
+            <a href="index.html" class="font-medium text-indigo-600 hover:text-indigo-500">Kembali ke Beranda</a>
+        </p>
+    </div>
+    <script type="module" src="/src/auth.js"></script>
+</body>
+</html>

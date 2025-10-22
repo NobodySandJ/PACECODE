@@ -1,182 +1,108 @@
 // src/main.js
-
 import './style.css';
 import { initScrollReveal } from './animation.js';
-// Impor fungsi-fungsi yang diperlukan dari Firebase SDK
-import { db } from './firebase.js';
+import { db, auth } from './firebase.js'; // Import auth
 import { collection, getDocs, query, limit } from "firebase/firestore";
+// *** ADD THIS: Import auth functions from auth.js ***
+import { observeAuthState, handleLogout, isAdmin } from './auth.js';
 
-// Fungsi untuk menandai link navigasi yang aktif
-const setActiveLink = () => {
-    const cleanPath = (path) => {
-        if (path.endsWith('index.html')) return '/';
-        if (path.length > 1 && path.endsWith('/')) return path.slice(0, -1);
-        return path;
-    };
-    const currentPath = cleanPath(window.location.pathname);
-    const profileSubPages = ['/fasilitas.html', '/guru.html', '/galeri.html'];
-    document.querySelectorAll('header > nav .nav-link').forEach(link => {
-        link.classList.remove('active-nav');
-        const linkPath = cleanPath(new URL(link.href).pathname);
-        if (linkPath === currentPath || (profileSubPages.includes(currentPath) && linkPath === '/profil.html')) {
-            link.classList.add('active-nav');
+
+// ... (rest of existing main.js code like setActiveLink, loadHeadlineBerita, loadPortfolioDataIndex)
+
+// *** ADD THIS: Function to update header UI based on auth state ***
+function updateHeaderUI(user) {
+    const userSpecificElements = document.getElementById('user-specific-elements'); // Need to add this div in header HTML
+    const loginRegisterElements = document.getElementById('login-register-elements'); // Need to add this div in header HTML
+    const adminLinkElement = document.getElementById('admin-link'); // Need to add this link in header HTML
+
+
+    if (user) {
+        // User is logged in
+        if (userSpecificElements) {
+            isAdmin(user).then(adminStatus => {
+                 userSpecificElements.innerHTML = `
+                    <span>Halo, ${user.email}</span>
+                    ${adminStatus ? '<a href="admin.html" class="nav-link" id="admin-link">Admin</a>' : ''}
+                    <button id="logout-button" class="ml-4 text-sm font-medium text-red-600 hover:text-red-800">Logout</button>
+                `;
+                 userSpecificElements.classList.remove('hidden');
+                 // Add event listener for the logout button
+                 const logoutButton = document.getElementById('logout-button');
+                 if (logoutButton) {
+                     logoutButton.addEventListener('click', handleLogout);
+                 }
+            });
+
+
         }
-    });
-};
+        if (loginRegisterElements) loginRegisterElements.classList.add('hidden');
+
+
+    } else {
+        // User is logged out
+        if (userSpecificElements) userSpecificElements.classList.add('hidden');
+        if (loginRegisterElements) {
+             loginRegisterElements.innerHTML = `
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="register.html" class="nav-link">Register</a>
+            `;
+            loginRegisterElements.classList.remove('hidden');
+        }
+        if (adminLinkElement) adminLinkElement.classList.add('hidden'); // Hide admin link if logged out
+    }
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- SETUP UI DASAR ---
-    const hamburgerButton = document.getElementById('hamburger-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const dropdownLinks = document.querySelectorAll('.nav-link-dropdown');
+    // ... (existing DOMContentLoaded code)
 
-    if (hamburgerButton && mobileMenu) {
-        hamburgerButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    }
+    // *** ADD THIS: Observe auth state and update UI ***
+    observeAuthState(user => {
+        updateHeaderUI(user);
 
-    const closeAllDropdowns = () => {
-        document.querySelectorAll('.dropdown-panel').forEach(p => {
-            p.classList.remove('visible', 'opacity-100', 'translate-y-0');
-            p.classList.add('invisible', 'opacity-0', '-translate-y-2');
-        });
-    };
-
-    dropdownLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const targetPanel = link.nextElementSibling;
-            const isTargetPanelOpen = !targetPanel.classList.contains('invisible');
-            closeAllDropdowns();
-            if (!isTargetPanelOpen) {
-                 targetPanel.classList.remove('invisible', 'opacity-0', '-translate-y-2');
-                 targetPanel.classList.add('visible', 'opacity-100', 'translate-y-0');
+         // If on admin page, check authorization again (important!)
+        if (window.location.pathname.endsWith('admin.html')) {
+            if (!user) {
+                alert("Silakan login untuk mengakses halaman admin.");
+                window.location.href = 'login.html';
+            } else {
+                isAdmin(user).then(adminStatus => {
+                    if (!adminStatus) {
+                         alert("Akses ditolak. Anda bukan admin.");
+                         window.location.href = 'index.html';
+                    }
+                     // else: User is admin, allow them to stay. Content loading is handled in admin.js
+                });
             }
-        });
+        }
     });
 
-    document.addEventListener('click', closeAllDropdowns);
-    setActiveLink();
 
-    // --- LOGIKA HEADLINE BERITA DARI FIREBASE ---
-    const headlineSection = document.getElementById('headline-berita');
-    const headlineContainer = document.getElementById('headline-container');
-    const headlineEnabled = localStorage.getItem('headlineEnabled') !== 'false';
+    // Ensure header HTML has placeholders for dynamic elements
+    const navUl = document.querySelector('header nav ul.hidden.md\\:flex'); // Adjust selector if needed
+    if (navUl && !document.getElementById('auth-elements-placeholder')) {
+        const authPlaceholder = document.createElement('div');
+        authPlaceholder.id = 'auth-elements-placeholder';
+        authPlaceholder.className = 'flex items-center space-x-4 ml-auto'; // Use ml-auto to push to the right
+        authPlaceholder.innerHTML = `
+            <div id="user-specific-elements" class="hidden flex items-center space-x-2"></div>
+            <div id="login-register-elements" class="hidden flex items-center space-x-4"></div>
+        `;
+        // Insert before the "Contact Us" button if it exists, otherwise append
+         const contactButton = navUl.nextElementSibling; // Assuming button is next sibling
+         if(contactButton && contactButton.tagName === 'BUTTON'){
+              navUl.parentElement.insertBefore(authPlaceholder, contactButton);
+         } else {
+             navUl.parentElement.appendChild(authPlaceholder);
+         }
 
-    async function loadHeadlineBerita() {
-        if (!headlineEnabled || !headlineSection) {
-            if (headlineSection) headlineSection.style.display = 'none';
-            return;
-        }
-        try {
-            // Mengambil 3 berita teratas dari koleksi 'berita'
-            const beritaCol = collection(db, 'berita');
-            const q = query(beritaCol, limit(3));
-            const beritaSnapshot = await getDocs(q);
-            const beritaData = beritaSnapshot.docs.map(doc => doc.data());
 
-            if (beritaData.length === 0) {
-                 throw new Error('Tidak ada data berita di Firestore.');
-            }
-
-            headlineContainer.innerHTML = beritaData.map(berita => `
-                <div class="bg-gray-50 rounded-lg overflow-hidden group">
-                    <img src="${berita.gambar}" alt="${berita.judul}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">${berita.judul}</h3>
-                        <p class="text-gray-600 leading-relaxed">${berita.ringkasan}</p>
-                    </div>
-                </div>
-            `).join('');
-        } catch (error) {
-            console.error('Gagal memuat berita headline dari Firestore:', error);
-            if(headlineSection) headlineSection.style.display = 'none';
-        }
     }
-    
-    loadHeadlineBerita();
 
-    // --- LOGIKA PORTOFOLIO DI INDEX DARI FIREBASE ---
-    const portfolioContainerIndex = document.getElementById("portfolio-container-index");
-    const jurusanFiltersIndex = document.getElementById("jurusan-filters-index");
 
+    loadHeadlineBerita(); // Call existing functions
     if (portfolioContainerIndex && jurusanFiltersIndex) {
-        let portfolioData = {};
-        let jurusanSaatIni = "";
-
-        const renderPortfolioIndex = (jurusan) => {
-            const dataJurusan = portfolioData[jurusan] || [];
-            portfolioContainerIndex.innerHTML = dataJurusan.slice(0, 4).map(item => `
-                <div class="bg-white rounded-lg shadow-md overflow-hidden group transform transition-all duration-300 hover:-translate-y-2">
-                    <div class="relative">
-                        <img src="${item.fotoProject}" alt="${item.namaProject}" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
-                    </div>
-                    <div class="p-5">
-                        <h3 class="text-lg font-bold text-gray-800 truncate">${item.namaProject}</h3>
-                        <p class="text-sm text-gray-500 mb-3">oleh ${item.nama}</p>
-                        <a href="portofolio.html" class="text-sm font-semibold text-purple-600 hover:text-purple-800">Lihat Detail →</a>
-                    </div>
-                </div>
-            `).join('');
-        };
-
-        const updateFilterButtonsIndex = () => {
-            jurusanFiltersIndex.querySelectorAll('button').forEach(button => {
-                const isSelected = button.textContent === jurusanSaatIni;
-                button.classList.toggle("bg-purple-600", isSelected);
-                button.classList.toggle("text-white", isSelected);
-                button.classList.toggle("bg-gray-200", !isSelected);
-                button.classList.toggle("text-gray-700", !isSelected);
-            });
-        };
-        
-        const setupJurusanFiltersIndex = () => {
-            const jurusanKeys = Object.keys(portfolioData);
-            jurusanFiltersIndex.innerHTML = jurusanKeys.map(jurusan =>
-                `<button class="px-4 py-2 text-sm font-medium rounded-full transition hover:bg-gray-300">${jurusan}</button>`
-            ).join('');
-            
-            jurusanFiltersIndex.querySelectorAll('button').forEach(button => {
-                button.addEventListener("click", () => {
-                    jurusanSaatIni = button.textContent;
-                    renderPortfolioIndex(jurusanSaatIni);
-                    updateFilterButtonsIndex();
-                });
-            });
-        };
-
-        const loadPortfolioDataIndex = async () => {
-            try {
-                const portfolioCol = collection(db, 'portfolio');
-                const portfolioSnapshot = await getDocs(portfolioCol);
-                const portfolioList = portfolioSnapshot.docs.map(doc => doc.data());
-                
-                // Mengelompokkan data berdasarkan jurusan
-                portfolioData = {};
-                portfolioList.forEach(item => {
-                    const { jurusan } = item;
-                    if (!portfolioData[jurusan]) {
-                        portfolioData[jurusan] = [];
-                    }
-                    portfolioData[jurusan].push(item);
-                });
-
-                if (Object.keys(portfolioData).length > 0) {
-                    jurusanSaatIni = Object.keys(portfolioData)[0];
-                    setupJurusanFiltersIndex();
-                    renderPortfolioIndex(jurusanSaatIni);
-                    updateFilterButtonsIndex();
-                } else {
-                    throw new Error("Tidak ada data portfolio di Firestore.");
-                }
-            } catch (error) {
-                console.error('Gagal memuat data portofolio dari Firestore:', error);
-                portfolioContainerIndex.innerHTML = `<p class="text-center text-red-500 col-span-full">Gagal memuat data portofolio.</p>`;
-            }
-        };
-
         loadPortfolioDataIndex();
     }
-    
     initScrollReveal();
 });

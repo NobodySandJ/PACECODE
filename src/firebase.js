@@ -4,7 +4,8 @@
 import { initializeApp } from "firebase/app";
 // BARIS INI PENTING: Mengimpor fungsi untuk Firestore
 import { getFirestore } from "firebase/firestore";
-
+// *** ADD THIS: Import Firebase Auth functions ***
+import { getAuth } from "firebase/auth";
 // TODO: Pastikan konfigurasi ini sesuai dengan yang ada di Firebase Console Anda
 const firebaseConfig = {
   apiKey: "AIzaSyDXHVQSAyUOIlQdKkDfZvxY3j5V7VcfLYM",
@@ -22,3 +23,6 @@ const app = initializeApp(firebaseConfig);
 // BARIS INI PENTING: Inisialisasi Firestore dan EKSPOR instance 'db'
 // agar bisa digunakan di file lain.
 export const db = getFirestore(app);
+
+// *** ADD THIS: Initialize Firebase Auth and export it ***
+export const auth = getAuth(app);
